@@ -255,8 +255,8 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                   <span>第 3 步 · 协议确认与支付</span>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
-                  第 3 步：确认委托协议并完成支付
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
+                  <span className="text-[#2AA894]">第 3 步：</span>确认委托协议并完成支付
                 </h1>
 
                 <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">

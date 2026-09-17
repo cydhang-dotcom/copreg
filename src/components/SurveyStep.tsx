@@ -186,9 +186,9 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               <span>第 1 步 · 需求评估</span>
             </div>
 
-            {/* Display Heading - states current step clearly without marketing */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-3">
-              第 1 步：填写企业开办基本信息与需求评估
+            {/* Display Heading - states current step clearly with brand color accent */}
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-3">
+              <span className="text-[#2AA894]">第 1 步：</span>填写企业开办基本信息与需求评估
             </h1>
 
             {/* Tips Card / Banner */}

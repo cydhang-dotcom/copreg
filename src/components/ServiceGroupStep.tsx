@@ -76,8 +76,8 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
               <span>专属服务群</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
-              专属服务保障群（含专员与智能助手）
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
+              <span className="text-[#2AA894]">第 5 步：</span>专属服务保障群（含专员与智能助手）
             </h1>
 
             <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">

@@ -134,8 +134,8 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               <span>第 2 步 · 方案与报价确认</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
-              第 2 步：确认服务方案与费用明细
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
+              <span className="text-[#2AA894]">第 2 步：</span>确认服务方案与费用明细
             </h1>
 
             <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
@@ -535,7 +535,9 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   <Receipt className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-[#0F172A]">03 · 服务项目与透明报价清单</h2>
+                  <h2 className="text-base sm:text-lg font-bold text-slate-800">
+                    <span className="text-[#2AA894] mr-1.5">03 ·</span>服务项目与透明报价清单
+                  </h2>
                   <span className="text-xs text-slate-400">
                     呈现核心开办服务明细 · 绝无后续隐形收费
                   </span>
@@ -654,7 +656,9 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-base sm:text-lg font-bold text-[#0F172A]">04 · 自选增值服务（按需单列勾选）</h2>
+                    <h2 className="text-base sm:text-lg font-bold text-slate-800">
+                      <span className="text-[#2AA894] mr-1.5">04 ·</span>自选增值服务（按需单列勾选）
+                    </h2>
                     <span className="text-[11px] font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
                       {selectedTier === 'standard' ? '统一透明标价 · 默认不勾选 · 按需加购' : '全年无忧套餐已全包 · 全部免费'}
                     </span>
@@ -806,7 +810,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               <span className="text-xs text-[#2AA894] font-semibold">办结出件成果物</span>
             </div>
 
-            <h3 className="text-base sm:text-lg font-bold text-[#0F172A] mb-3">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 mb-3">
               签约完成后您将收到的全套实体与电子交付物
             </h3>
 

@@ -148,8 +148,8 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
               <span>企业注册资料填报</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
-              填写企业注册登记信息与上传申报资料
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
+              <span className="text-[#2AA894]">第 4 步：</span>填写企业注册登记信息与上传申报资料
             </h1>
 
             <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
