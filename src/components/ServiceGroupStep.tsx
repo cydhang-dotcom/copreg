@@ -1,0 +1,385 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState } from 'react';
+import { ChatMessage, RegistrationPlan, PaymentOrder } from '../types';
+import { 
+  Send, 
+  Bot, 
+  UserCheck, 
+  Calendar, 
+  FileCheck, 
+  Clock, 
+  ArrowRight, 
+  ArrowLeft, 
+  Sparkles, 
+  Users, 
+  CheckCircle2, 
+  AlertCircle, 
+  Megaphone, 
+  Shield, 
+  HelpCircle, 
+  FileText 
+} from 'lucide-react';
+
+interface ServiceGroupStepProps {
+  plan: RegistrationPlan;
+  order: PaymentOrder;
+  messages: ChatMessage[];
+  onSendMessage: (text: string) => void;
+  onProceedToFillDetails: () => void;
+  onBackToPayment?: () => void;
+}
+
+export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
+  plan,
+  order,
+  messages,
+  onSendMessage,
+  onProceedToFillDetails,
+  onBackToPayment
+}) => {
+  const [inputText, setInputText] = useState('');
+
+  const quickPrompts = [
+    '法人和股东必须到政务现场吗？',
+    '新《公司法》5年认缴实缴怎么算？',
+    '公司名字怎么取市监通过率最高？',
+    '银行开户需要带什么资料？',
+    '第一年不记账报税会有什么后果？'
+  ];
+
+  const handleSend = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const text = inputText.trim();
+    if (!text) return;
+    onSendMessage(text);
+    setInputText('');
+  };
+
+  const handleQuickPrompt = (p: string) => {
+    onSendMessage(p);
+  };
+
+  return (
+    <div className="pb-32">
+      
+      <div className="relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
+
+          {/* Hero Section */}
+          <section className="mb-8">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
+              <span>协同阶段 · C-U 建立专属服务群（含 AI 助手）</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
+              团队就位，<br />
+              <span className="text-[#48BFA2]">专属服务保障群与节点告知</span>
+            </h1>
+
+            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
+              客服顾问 Lisa、交付主管张经理与 7×24 小时智能 AI 助手已全部在群。办理节点、资料规范与常见疑虑均可实时解答。
+            </p>
+          </section>
+
+          {/* Action Banner to Proceed to Next Step */}
+          <div className="bg-[#F4FCFA] rounded-3xl p-6 sm:p-7 border border-[#D1F2EB] shadow-xs mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#55C5A7] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <FileCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E6F7F2] text-[#2AA894]">
+                    当前待办事项
+                  </span>
+                  <h3 className="font-bold text-[#0F172A] text-sm sm:text-base">
+                    填写企业详细登记信息并上传申办资料
+                  </h3>
+                </div>
+                <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                  依据市监准则，需申报法定名称、备选字号、股东持股架构，并上传身份证与住所证明。
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onProceedToFillDetails}
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white font-medium text-xs sm:text-sm shadow-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+            >
+              <span>立即填报信息与上传资料</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Main Grid: Left Chat Window + Right Process & SLA Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* Left 2 Cols: Chat Window */}
+            <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-xs flex flex-col h-[580px] overflow-hidden">
+              
+              {/* Chat Header */}
+              <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-2xl bg-[#E6F7F2] text-[#2AA894] flex items-center justify-center text-xs font-bold shadow-2xs">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs sm:text-sm text-[#0F172A] flex items-center gap-2">
+                      企业设立专属交付服务群
+                      <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                        官方认证
+                      </span>
+                    </h4>
+                    <div className="flex items-center gap-1 text-[11px] text-slate-400">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>4人在线：顾问 Lisa、主管张经理、AI小企、客户林总</span>
+                    </div>
+                  </div>
+                </div>
+
+                <span className="text-[11px] font-semibold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-1 rounded-full">
+                  订单 {order.orderNo.slice(0, 10)}…
+                </span>
+              </div>
+
+              {/* Pinned Group Announcement */}
+              <div className="px-4 py-2.5 bg-[#FEF9EE] border-b border-[#FDE68A] flex items-start gap-2 text-xs text-amber-900">
+                <Megaphone className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <span className="font-bold">群公告：</span>
+                  <span className="text-amber-800">
+                    本群由专业团队提供 1对1 设立全流程陪伴。请客户优先点击上方完成资料上传，我们将在 30 分钟内完成首轮初审！
+                  </span>
+                </div>
+              </div>
+
+              {/* Messages Container */}
+              <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/40">
+                {messages.map((msg) => {
+                  const isMe = msg.role === 'customer' || msg.isSelf;
+
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex items-start gap-2.5 ${isMe ? 'flex-row-reverse' : ''}`}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-sm shadow-2xs shrink-0 select-none">
+                        {msg.avatar}
+                      </div>
+
+                      <div className={`max-w-[85%] ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="text-[11px] font-bold text-slate-700">{msg.sender}</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
+                            msg.role === 'advisor'
+                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                              : msg.role === 'delivery'
+                              ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                              : msg.role === 'ai'
+                              ? 'bg-[#E6F7F2] text-[#2AA894]'
+                              : 'bg-slate-100 text-slate-600'
+                          }`}>
+                            {msg.roleTag}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-mono">{msg.timestamp}</span>
+                        </div>
+
+                        <div
+                          className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-2xs ${
+                            isMe
+                              ? 'bg-[#55C5A7] text-white rounded-tr-none font-medium'
+                              : msg.role === 'ai'
+                              ? 'bg-[#F4FCFA] border border-[#D1F2EB] text-[#0F172A] rounded-tl-none'
+                              : 'bg-white border border-slate-200 text-[#0F172A] rounded-tl-none'
+                          }`}
+                        >
+                          {msg.content}
+
+                          {/* Interactive prompt payload if available */}
+                          {msg.actionPayload && (
+                            <div className="mt-2.5 pt-2.5 border-t border-slate-200/60 flex items-center justify-between">
+                              <span className="text-xs font-semibold text-[#2AA894]">
+                                {msg.actionPayload.title}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={onProceedToFillDetails}
+                                className="text-xs font-semibold text-white bg-[#55C5A7] hover:bg-[#48BFA2] px-3 py-1 rounded-full cursor-pointer"
+                              >
+                                立即办理
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Quick Prompts Chips */}
+              <div className="px-3 py-2 border-t border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                <span className="text-[10px] font-bold text-slate-400 shrink-0 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-[#36B39E]" />
+                  快捷提问:
+                </span>
+                {quickPrompts.map((p, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => handleQuickPrompt(p)}
+                    className="px-2.5 py-1 rounded-full text-[11px] bg-slate-50 hover:bg-[#E6F7F2] hover:text-[#2AA894] border border-slate-200 text-slate-600 shrink-0 transition-colors cursor-pointer whitespace-nowrap"
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+
+              {/* Input Bar */}
+              <form onSubmit={handleSend} className="p-3 border-t border-slate-100 bg-white flex items-center gap-2">
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="向专属顾问或智能 AI 提问任何设立细节…"
+                  className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 text-xs sm:text-sm outline-none focus:border-[#48BFA2] bg-slate-50/50"
+                />
+                <button
+                  type="submit"
+                  disabled={!inputText.trim()}
+                  className="p-2.5 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white disabled:opacity-40 transition-transform active:scale-95 cursor-pointer shadow-2xs"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            </div>
+
+            {/* Right Col: Timeline & Process Guides */}
+            <div className="space-y-4">
+              
+              {/* Card 1: 3-Day Roadmap */}
+              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+                <h3 className="font-bold text-sm text-[#0F172A] flex items-center gap-2 mb-3">
+                  <Calendar className="w-4 h-4 text-[#36B39E]" />
+                  <span>3 个工作日办理时限节点</span>
+                </h3>
+
+                <div className="space-y-3 text-xs">
+                  <div className="flex gap-2.5 items-start">
+                    <div className="w-5 h-5 rounded-full bg-[#E6F7F2] text-[#2AA894] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      1
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#0F172A] block">今日 (Day 1)</span>
+                      <span className="text-[#64748B]">
+                        填报企业字号与股东资料，30分钟完成初审，生成标准化章程及网申档案。
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2.5 items-start">
+                    <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-600 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      2
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#0F172A] block">明日 (Day 2)</span>
+                      <span className="text-[#64748B]">
+                        政务综合网申立项，推送全体股东及法人完成移动端人脸电子签名。
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2.5 items-start">
+                    <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-600 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      3
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#0F172A] block">后日 (Day 3)</span>
+                      <span className="text-[#64748B]">
+                        市监核发执照正副本，刻制公安防伪芯片印章，顺丰特快当日寄发。
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Required Docs Checklist */}
+              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+                <h3 className="font-bold text-sm text-[#0F172A] flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4 text-[#36B39E]" />
+                  <span>申办必备资料清单</span>
+                </h3>
+
+                <div className="space-y-2 text-xs text-[#64748B]">
+                  <div className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
+                    <span>法定代表人身份证清晰扫描件</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
+                    <span>监事及全体股东身份证件</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
+                    <span>经营场地证明（自有租赁合同 / 集群挂靠）</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
+                    <span>公司章程及设立申请（系统自动生成）</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: SLA Guarantee */}
+              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+                <h3 className="font-bold text-sm text-[#0F172A] flex items-center gap-2 mb-2">
+                  <Shield className="w-4 h-4 text-[#36B39E]" />
+                  <span>服务标准承诺 (SLA)</span>
+                </h3>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  • 工作日咨询 5 分钟内快速响应<br />
+                  • 材料初审在 30 分钟内完成反馈<br />
+                  • 非客户原因设立失败，100% 退还服务费
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* Floating Bottom Bar */}
+      <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-100 py-3.5 px-6 shadow-md">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={onBackToPayment}
+            className="px-6 py-2.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>查看已付凭证</span>
+          </button>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onProceedToFillDetails}
+              className="px-7 py-2.5 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white text-sm font-medium shadow-xs transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>前往填报详细信息与资料</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

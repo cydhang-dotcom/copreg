@@ -1,0 +1,6 @@
+{
+  "name": "企业设立全流程数字化服务平台",
+  "description": "提供企业设立核心需求调查、智能方案与服务报价、在线签约支付、专属企微服务群、注册信息与资料归集、客服核验及交付团队进度追踪全流程服务。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
