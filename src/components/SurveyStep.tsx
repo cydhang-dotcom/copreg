@@ -13,7 +13,8 @@ import {
   Sparkles, 
   Check, 
   X, 
-  ArrowRight
+  ArrowRight,
+  Info
 } from 'lucide-react';
 import { AI_INDUSTRY_TEMPLATES, DEFAULT_AI_TEMPLATE, INITIAL_SURVEY_DATA } from '../data/mockData';
 
@@ -177,24 +178,33 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
       <div className="relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
           
-          {/* ==================== Hero Section ==================== */}
-          <section className="mb-8">
-            {/* Tag Pill - exact match with image.png */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+          {/* ==================== Top Step Heading & Tips ==================== */}
+          <section className="mb-6">
+            {/* Step Tag Pill */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>企业设立 · 需求调研</span>
+              <span>第 1 步 · 需求评估</span>
             </div>
 
-            {/* Display Heading - exact font sizes, colors, and line breaks */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-              开设企业，<br />
-              <span className="text-[#48BFA2]">先把核心需求理清楚</span>
+            {/* Display Heading - states current step clearly without marketing */}
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-3">
+              第 1 步：填写企业开办基本信息与需求评估
             </h1>
 
-            {/* Subtitle / intro paragraph */}
-            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-              用于工商注册、税务开票、用工社保与股权架构方案评估。带 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-xs font-bold mx-0.5">必填</span> 的项建议完整提供；经营范围与许可资质可点击「AI 智能填充」生成科目，敏感要素为固定选项，AI 会自动勾选匹配项。
-            </p>
+            {/* Tips Card / Banner */}
+            <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-200/90 flex items-start gap-3 text-xs sm:text-[13px] text-amber-950 leading-relaxed shadow-2xs">
+              <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
+                <Info className="w-4 h-4 stroke-[2.5]" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="font-bold text-amber-900 text-xs sm:text-[13px]">
+                  填写须知与操作提示 (Tips)
+                </div>
+                <p className="text-amber-800 text-xs sm:text-[13px] leading-relaxed">
+                  用于工商注册、税务开票、用工社保与股权架构方案评估。带 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-xs font-bold mx-0.5 border border-amber-300">必填</span> 的项建议完整提供；经营范围与许可资质可点击「AI 智能填充」生成科目，敏感要素为固定选项，AI 会自动勾选匹配项。
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* ==================== 01 核心需求 (Exact matching image.png) ==================== */}

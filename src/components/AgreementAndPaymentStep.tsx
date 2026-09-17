@@ -65,6 +65,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   // Agreement confirmation state
   const [hasAgreed, setHasAgreed] = useState(true);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
+  const [showServiceContentModal, setShowServiceContentModal] = useState(false);
 
   // Payment method
   const [payMethod, setPayMethod] = useState<'wechat' | 'alipay'>(
@@ -92,7 +93,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   // Triggered when user clicks "立即支付"
   const handleStartPayment = () => {
     if (!hasAgreed) {
-      showToast('请先勾选同意《企业设立及财税综合服务委托协议》');
+      showToast('请先勾选同意《委托代理服务协议》');
       return;
     }
     // Open SMS verification modal as required
@@ -171,48 +172,49 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   // Checklist items for post-payment status display
   const checklistItems = [
     {
-      title: '企业设立基础资料核验与网申材料编制',
-      desc: '依《公司法》规范核验字号、股东出资比例及经营范围，已完成全套文书编制',
-      status: 'completed',
-      statusLabel: '已完成',
-      dept: '系统 / 申报专员',
-      time: '即时完成'
+      title: '【核心前置】企业注册申报资料在线填报与合规初审',
+      desc: '在线登记企业备选字号、股东股权架构、法人/监事实名信息及经营场所证明。专属顾问在您提交后 2 小时内完成合规审核。审核通过后即刻启动后续各项政务审批与代办服务。',
+      status: 'in_progress',
+      statusLabel: '等待填报与初审',
+      dept: '经办人在线填报 / 专属团队',
+      time: '第一步（必经前置）',
+      isPrereq: true
     },
     {
       title: '市场监督管理局行政审批送审与执照领办',
-      desc: '专人对接属地市监行政审批大厅，电子实名签名核验后领办营业执照正副本原件',
-      status: 'in_progress',
-      statusLabel: '正在办理',
+      desc: '【前置条件：资料审核通过后启动】专人对接属地市监行政审批网申系统编制申报底稿，协同全体股东完成实名认证电子签名后，领办纸质营业执照正副本原件。',
+      status: 'waiting',
+      statusLabel: '待资料审核后启动',
       dept: '市场监督管理局',
-      time: '预计 1~2 工作日'
+      time: '资料审核通过后 1~2 工作日'
     },
     {
       title: '公安特行备案防伪芯片印章刻制（全套5枚）',
-      desc: '公章、财务章、发票章、合同章、法人私章，特行刻印点内嵌芯片防伪备案',
+      desc: '【前置条件：执照下发后启动】公章、财务章、发票章、合同章、法人私章，公安特行刻印点内嵌芯片防伪备案。',
       status: 'pending',
-      statusLabel: '等待前置',
+      statusLabel: '执照核发后启动',
       dept: '公安局特行备案点',
       time: '执照下发后 4 小时'
     },
     {
       title: '合作商业银行对公账户绿色通道开户预约',
-      desc: '招商银行/工商银行/平安银行专属客户经理绿色通道对接，专人协同网点开户',
+      desc: '【前置条件：证照齐全后启动】招商银行/工商银行/平安银行专属客户经理绿色通道对接，专人协同网点开户。',
       status: 'waiting',
-      statusLabel: '待预约',
+      statusLabel: '证照齐全后启动',
       dept: '合作商业银行',
       time: '证照齐全后次日'
     },
     {
       title: '国家电子税务局企业税种核定与登记',
-      desc: '办理电子税务局实名登记、税种核定、发票票种及数电发票额度申领',
+      desc: '【前置条件：开户完成后启动】办理电子税务局实名登记、税种核定、发票票种及数电发票额度申领。',
       status: 'pending',
-      statusLabel: '等待前置',
+      statusLabel: '开户完成后启动',
       dept: '国家税务总局电子税局',
       time: '开户完成后 1 工作日'
     },
     {
       title: '专属财税专员建账与全年记账报税托管',
-      desc: '持证资深会计师建立标准财务账套，按期纳税申报及汇算清缴',
+      desc: '【常态化托管服务】持证资深会计师建立标准财务账套，按期纳税申报及汇算清缴。',
       status: 'planned',
       statusLabel: '按期交付',
       dept: '专属财税团队',
@@ -220,7 +222,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
     },
     {
       title: '单位独立社保与住房公积金开户及托管',
-      desc: '开立单位专属五险一金账户，按月协助员工增减员申报与基数核算',
+      desc: '【按需申报】开立单位专属五险一金账户，按月协助员工增减员申报与基数核算。',
       status: 'planned',
       statusLabel: '按需申报',
       dept: '人社局 / 公积金中心',
@@ -246,20 +248,19 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
           {/* ========================================================= */}
           {!isPaid ? (
             <div>
-              {/* Header */}
-              <section className="mb-8">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+              {/* Top Step Heading - states current step clearly */}
+              <section className="mb-6">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-                  <span>安全结算 · 确认委托方案与在线支付</span>
+                  <span>第 3 步 · 协议确认与支付</span>
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-                  安全结算，<br />
-                  <span className="text-[#36B39E]">委托协议确认与在线支付</span>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
+                  第 3 步：确认委托协议并完成支付
                 </h1>
 
-                <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-                  请核对您的企业设立委托方案及明细费用。在线确认委托代办协议后，即可调起微信或支付宝支付。支付后即刻为您指派专属顾问与服务专员。
+                <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
+                  请核对您的企业设立委托方案与费用明细，完成短信实名验证并在线支付，即可启动代办流程。
                 </p>
               </section>
 
@@ -276,7 +277,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                     </div>
                   </div>
                   <span className="text-xs font-bold text-[#36B39E] bg-[#E6F7F2] px-3 py-1 rounded-full">
-                    {plan.selectedTier === 'standard' ? '标准设立套餐' : plan.selectedTier === 'bundle_general' ? '一般人全包套餐' : '小规模全包套餐'}
+                    {plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
                   </span>
                 </div>
 
@@ -340,84 +341,36 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                 </div>
               </div>
 
-              {/* Section 2: Merged Service Agreement Confirmation */}
-              <div className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs">
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-2xl bg-[#E6F7F2] flex items-center justify-center text-[#36B39E]">
-                      <FileText className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-[#0F172A]">委托代理服务协议确认</h2>
-                      <span className="text-xs text-slate-400">电子签约条款确认 · 保障双方合法权益</span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowAgreementModal(true)}
-                    className="text-xs font-bold text-[#36B39E] hover:text-[#2AA894] underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>查看完整协议条款</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Agreement key clauses summary */}
-                <div className="space-y-3 mb-5 text-xs sm:text-sm text-[#64748B]">
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <Building2 className="w-4 h-4 text-[#36B39E] shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold text-slate-800">委托服务范围：</span>
-                      <span className="text-slate-600">
-                        受托方负责为委托方办理企业名称自主申报、公司章程起草备案、政务网申材料编制送审、辅导股东电子签名、领办纸质营业执照正副本原件、公安特行备案防伪芯片印章5枚刻制及相应财税托管服务。
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <ShieldCheck className="w-4 h-4 text-[#36B39E] shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold text-slate-800">时效与履约保障：</span>
-                      <span className="text-slate-600">
-                        材料签署齐全后 3 个工作日内办结营业执照。若因受托方差错导致设立不成功，全额无理由退还已收代办费用。
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <Lock className="w-4 h-4 text-[#36B39E] shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold text-slate-800">保密合规约定：</span>
-                      <span className="text-slate-600">
-                        全程实行金融级数据加密，双方签署严格保密义务，委托方提供的身份证明、股东信息仅用于本次企业开办政务申报。
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Agreement Checkbox */}
-                <div className="p-4 rounded-2xl border-2 border-[#36B39E]/30 bg-[#F4FCFA] flex items-start gap-3">
+              {/* Section 2: Minimal Service Agreement Confirmation */}
+              <div className="rounded-2xl p-4 sm:p-5 mb-6 border border-slate-200 bg-white shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700 select-none">
                   <input
                     type="checkbox"
                     id="checkbox-agreement"
                     checked={hasAgreed}
                     onChange={(e) => setHasAgreed(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-[#36B39E] border-slate-300 rounded focus:ring-[#36B39E] cursor-pointer"
+                    className="w-4 h-4 text-[#36B39E] border-slate-300 rounded focus:ring-[#36B39E] cursor-pointer shrink-0"
                   />
-                  <label htmlFor="checkbox-agreement" className="text-xs text-slate-700 leading-relaxed cursor-pointer select-none">
-                    <span className="font-bold text-slate-900">我已阅读并完全同意</span>
+                  <label htmlFor="checkbox-agreement" className="cursor-pointer">
+                    <span>我已阅读并同意</span>
                     <button
                       type="button"
                       onClick={() => setShowAgreementModal(true)}
-                      className="text-[#36B39E] font-bold underline mx-1 hover:text-[#2AA894] cursor-pointer"
+                      className="text-[#36B39E] font-bold underline hover:text-[#2AA894] mx-1 cursor-pointer inline-flex items-center gap-0.5"
                     >
-                      《企业设立及财税综合服务委托协议》
+                      <span>《委托代理服务协议》</span>
+                      <ExternalLink className="w-3.5 h-3.5 inline" />
                     </button>
-                    及
-                    <span className="text-slate-900 font-bold mx-1">《商业秘密与个人数据保护条款》</span>
-                    。点击下方立即支付即视为在线签署该委托协议。
                   </label>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowAgreementModal(true)}
+                  className="text-xs text-slate-500 hover:text-[#36B39E] underline cursor-pointer text-left sm:text-right shrink-0"
+                >
+                  点击查看协议全文
+                </button>
               </div>
 
               {/* Section 3: Payment Method Selection */}
@@ -523,9 +476,29 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                       <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full mb-1">
                         支付成功 · 委托代办已生效
                       </div>
-                      <h1 className="text-2xl font-black text-slate-900">
-                        服务费用已缴清，政务代办专班已启动
+                      <h1 className="text-xl sm:text-2xl font-black text-slate-900">
+                        欢迎使用“班步一企通”服务
                       </h1>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <span className="text-xs text-slate-500 font-medium">当前开通服务套餐：</span>
+                        <span className="text-xs font-black text-[#2AA894] bg-[#E6F7F2] px-2.5 py-1 rounded-lg border border-[#36B39E]/30">
+                          {plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
+                        </span>
+                        {plan.selectedAddons && plan.selectedAddons.length > 0 && (
+                          <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                            已含 {plan.selectedAddons.length} 项自选增值服务
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setShowServiceContentModal(true)}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-[#2AA894] hover:text-[#238b7a] bg-white hover:bg-slate-50 border border-[#36B39E]/40 px-3 py-1 rounded-full shadow-2xs cursor-pointer transition-all ml-1"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-[#36B39E]" />
+                          <span>点击查看服务内容</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div className="text-left sm:text-right">
@@ -554,7 +527,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                 </div>
               </div>
 
-              {/* Requirement 1: Enterprise WeChat QR Code */}
+              {/* Requirement: Enterprise WeChat Customer Service */}
               <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
                 <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
@@ -563,11 +536,11 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-slate-900">添加企业微信专属客服</h2>
-                      <span className="text-xs text-slate-400">1 对 1 专员全流程协同跟进，实时同步执照审批状态</span>
+                      <span className="text-xs text-slate-400">可微信扫码手动添加，或等待服务专员与您联系</span>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                    在线服务中
+                    可手动添加 · 或等待专员联系
                   </span>
                 </div>
 
@@ -589,74 +562,39 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                       <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">企业微信官方认证</span>
                     </div>
                     <p className="leading-relaxed text-slate-600">
-                      扫码添加顾问企业微信后，顾问将立即拉起专属设立保障群，协同行政审批专员、公安特行刻章专员与专属财税会计师，为您全程无忧代办。
+                      您可使用微信扫描左侧二维码<strong>手动添加专属顾问企业微信</strong>，立即拉起 1 对 1 专属设立保障群；您也可以<strong>保持电话畅通，等待服务专员与您联系</strong>，专员将在工作时间内主动致电协助开展后续所有申报代办事项。
                     </p>
                     <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-slate-500">
-                      <span className="px-2.5 py-1 rounded-lg bg-white border border-slate-200">✓ 进度实时同步</span>
+                      <span className="px-2.5 py-1 rounded-lg bg-white border border-slate-200">✓ 可手动扫码添加</span>
+                      <span className="px-2.5 py-1 rounded-lg bg-white border border-slate-200">✓ 或等待专员致电联系</span>
                       <span className="px-2.5 py-1 rounded-lg bg-white border border-slate-200">✓ 纸质证照同城闪送</span>
-                      <span className="px-2.5 py-1 rounded-lg bg-white border border-slate-200">✓ 7×24小时在线答疑</span>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Corporate Registration Materials */}
-              <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                      <FileText className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h2 className="text-lg font-bold text-slate-900">企业注册申报资料</h2>
-                      </div>
-                      <span className="text-xs text-slate-400">政务服务系统企业设立登记与材料填报</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="text-xs text-slate-600 space-y-1">
-                    <p className="font-bold text-slate-800">
-                      政务服务申报材料档案系统（市监局网申库）
-                    </p>
-                    <p className="text-slate-500">
-                      包含公司章程、股东会决议、法定代表人任职文件、经营场所证明等政务备案原件底稿。可在政务申报平台直接下载、核验或填报档案。
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onProceedToFillDetails) {
-                        onProceedToFillDetails();
-                      } else {
-                        window.open('https://scjgj.beijing.gov.cn', '_blank', 'noopener,noreferrer');
-                      }
-                    }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm hover:shadow transition-all shrink-0 cursor-pointer"
-                  >
-                    <span>在线注册资料登记</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
                 </div>
               </div>
 
               {/* Requirement 3: Service Checklist & Handling Status */}
               <div className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs">
-                <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-slate-100 gap-3">
                   <div className="flex items-center gap-2.5">
                     <div className="w-10 h-10 rounded-2xl bg-[#E6F7F2] flex items-center justify-center text-[#36B39E]">
                       <Clock className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-slate-900">服务进度状态与办理清单 (Checklist)</h2>
-                      <span className="text-xs text-slate-400">按照服务checklist清单实时呈现当前各事项办理状态</span>
+                      <h2 className="text-lg font-bold text-slate-900">服务进度状态与办理清单</h2>
+                      <span className="text-xs text-slate-400">按照企业开办标准化服务清单实时呈现当前各事项办理状态</span>
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-[#36B39E] bg-[#E6F7F2] px-3 py-1 rounded-full">
-                    办理中：第 2 项 / 共 7 项
+                  <span className="text-xs font-bold text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 self-start sm:self-auto">
+                    当前节点：待申报资料填报并审核通过
+                  </span>
+                </div>
+
+                {/* 前置启动规则提示 */}
+                <div className="p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200 mb-5 flex items-start gap-2.5 text-xs text-blue-900">
+                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>服务启动规则说明：</strong>第 1 项【企业注册申报资料填报与初审】提交且审核通过后，代办专班将自动启动第 2 项市场监督管理局审批及后续各项政务代办、刻章与开户服务。
                   </span>
                 </div>
 
@@ -673,7 +611,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                           isDone
                             ? 'border-emerald-200 bg-emerald-50/40'
                             : isInProgress
-                            ? 'border-[#36B39E] bg-[#F4FCFA] shadow-xs'
+                            ? 'border-amber-300 bg-amber-50/40 shadow-xs'
                             : 'border-slate-200 bg-slate-50/50'
                         }`}
                       >
@@ -684,7 +622,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                                 <Check className="w-3.5 h-3.5 stroke-[3]" />
                               </div>
                             ) : isInProgress ? (
-                              <div className="w-5 h-5 rounded-full bg-[#36B39E] text-white flex items-center justify-center animate-pulse">
+                              <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center animate-pulse">
                                 <span className="w-2 h-2 rounded-full bg-white"></span>
                               </div>
                             ) : (
@@ -709,12 +647,23 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
 
                         <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
                           <span className="text-xs text-slate-400 font-medium">{item.time}</span>
+                          {item.isPrereq && isInProgress && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (onProceedToFillDetails) onProceedToFillDetails();
+                              }}
+                              className="px-3 py-1 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold cursor-pointer transition-all shadow-xs"
+                            >
+                              立即去填报
+                            </button>
+                          )}
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-bold ${
                               isDone
                                 ? 'bg-emerald-100 text-emerald-700'
                                 : isInProgress
-                                ? 'bg-[#36B39E] text-white shadow-2xs'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-200'
                                 : 'bg-slate-200/70 text-slate-600'
                             }`}
                           >
@@ -911,7 +860,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">企业设立及财税综合服务委托协议</h3>
+                  <h3 className="text-base font-bold text-slate-900">委托代理服务协议</h3>
                   <span className="text-xs text-slate-400">合同编号：HT-2026-0917-8891</span>
                 </div>
               </div>
@@ -978,6 +927,134 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                 className="px-6 py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold cursor-pointer"
               >
                 我已阅读并同意签署
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* ================= MODAL 4: SERVICE DETAILS CONTENT MODAL ================ */}
+      {/* ========================================================================= */}
+      {showServiceContentModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#E6F7F2] text-[#36B39E] flex items-center justify-center">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">“班步一企通”服务内容与交付清单</h3>
+                  <span className="text-xs text-slate-400">
+                    当前开通套餐：{plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowServiceContentModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-600 leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
+              {/* Plan highlight card */}
+              <div className="p-4 rounded-2xl bg-[#F4FCFA] border border-[#C5EFE3] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-slate-900 text-sm">
+                      {plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
+                    </span>
+                    <span className="text-[11px] font-bold text-[#2AA894] bg-white px-2 py-0.5 rounded-md border border-[#36B39E]/20">
+                      生效中
+                    </span>
+                  </div>
+                  <p className="text-slate-500 text-xs mt-1">
+                    {plan.selectedTier === 'standard'
+                      ? '包含：全程政务网申代办、营业执照正副本原件领办、公安备案防伪芯片印章全套5枚及市监规费全免'
+                      : '包含：【企业注册服务】全套（执照正副本+芯片5章+规费全免）及全年12个月记账报税托管'}
+                  </p>
+                </div>
+                <div className="text-left sm:text-right shrink-0">
+                  <span className="text-slate-400 text-[11px] block">结算金额</span>
+                  <span className="text-xl font-black text-[#36B39E]">¥ {formatMoney(order?.amount ?? finalPrice)} 元</span>
+                </div>
+              </div>
+
+              {/* Service Items Table */}
+              <div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mb-2 flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-[#36B39E]" />
+                  <span>服务项目明细及服务标准</span>
+                </h4>
+                <div className="border border-slate-200 rounded-2xl overflow-hidden divide-y divide-slate-100">
+                  {items.map((item, idx) => (
+                    <div key={item.id || idx} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50 transition-colors">
+                      <div className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0 mt-0.5" />
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-slate-800 text-xs">{item.name}</span>
+                            {item.tag && (
+                              <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
+                                {item.tag}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[11px] text-slate-500 block mt-0.5">{item.desc}</span>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 font-bold text-xs pl-6 sm:pl-0">
+                        {item.price === 0 ? (
+                          <span className="text-emerald-600">¥ 0 (免费)</span>
+                        ) : (
+                          <span className="text-slate-900">¥ {formatMoney(item.price)}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Deliverables */}
+              <div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mb-2 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#36B39E]" />
+                  <span>办结实体与电子交付清单</span>
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {(plan.deliverables || [
+                    '营业执照正本、副本原件（政务印制镭射防伪防复制）',
+                    '公安备案特行芯片印章5枚（公章、财务章、发票章、合同章、法人章）',
+                    '印章公安系统特行备案证明书与芯片编码凭证',
+                    '公司章程原件与股东会决议标准备案文本',
+                    '电子税务局开户账套档案与纳税人申报回执',
+                    '单位社保、住房公积金独立专户编号凭证'
+                  ]).map((del, idx) => (
+                    <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2 text-slate-700">
+                      <Check className="w-3.5 h-3.5 text-[#36B39E] shrink-0 stroke-[3]" />
+                      <span className="text-[11px] font-medium">{del}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Policy notes */}
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px]">
+                <strong>班步一企通服务保障承诺：</strong>所选套餐与增值服务已完全缴清，绝无任何二次巧立名目加价；全程专人政务代办，办结物料顺丰安全包邮寄达。
+              </div>
+            </div>
+
+            <div className="pt-4 mt-5 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowServiceContentModal(false)}
+                className="px-6 py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold cursor-pointer"
+              >
+                关闭
               </button>
             </div>
           </div>

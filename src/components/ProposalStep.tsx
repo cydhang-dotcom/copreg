@@ -4,8 +4,8 @@
  */
 
 import React, { useState } from 'react';
-import { RegistrationPlan, SurveyData, ServiceTierType } from '../types';
-import { generatePlanFromSurvey } from '../data/mockData';
+import { RegistrationPlan, SurveyData, ServiceTierType, OptionalAddonService } from '../types';
+import { generatePlanFromSurvey, OPTIONAL_ADDON_SERVICES, ALL_ADDON_IDS } from '../data/mockData';
 import { 
   Building, 
   Receipt, 
@@ -51,6 +51,16 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
       : 'bundle_small';
 
   const [selectedTier, setSelectedTier] = useState<ServiceTierType>(initialTier);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>(() => {
+    // 企业注册服务默认都是不选择的
+    if (initialTier === 'standard') {
+      return [];
+    }
+    if (plan.selectedAddons && plan.selectedAddons.length > 0) {
+      return plan.selectedAddons;
+    }
+    return [...ALL_ADDON_IDS];
+  });
   const [showReportModal, setShowReportModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -67,15 +77,49 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
   // Handler to switch tier
   const handleTierSelect = (tier: ServiceTierType) => {
     setSelectedTier(tier);
-    const updatedPlan = generatePlanFromSurvey(survey, tier);
+    // 企业注册服务：默认都是不选择的；全年无忧套餐：默认全选
+    let nextAddons: string[];
+    if (tier === 'standard') {
+      nextAddons = [];
+    } else {
+      nextAddons = selectedAddons.length > 0 ? selectedAddons : [...ALL_ADDON_IDS];
+    }
+    setSelectedAddons(nextAddons);
+    const updatedPlan = generatePlanFromSurvey(
+      survey,
+      tier,
+      tier === 'bundle_general' ? 'general' : 'small',
+      nextAddons
+    );
     if (onUpdatePlan) {
       onUpdatePlan(updatedPlan);
     }
   };
 
-  const activePlan = plan.selectedTier === selectedTier
+  // Handler to toggle optional addon service
+  const handleToggleAddon = (addonId: string) => {
+    const isCurrentlyActive = selectedAddons.includes(addonId);
+    const nextAddons = isCurrentlyActive
+      ? selectedAddons.filter(id => id !== addonId)
+      : [...selectedAddons, addonId];
+    setSelectedAddons(nextAddons);
+    const updatedPlan = generatePlanFromSurvey(
+      survey,
+      selectedTier,
+      selectedTier === 'bundle_general' ? 'general' : 'small',
+      nextAddons
+    );
+    if (onUpdatePlan) {
+      onUpdatePlan(updatedPlan);
+    }
+  };
+
+  const activePlan = (plan.selectedTier === selectedTier && JSON.stringify(plan.selectedAddons || []) === JSON.stringify(selectedAddons))
     ? plan
-    : generatePlanFromSurvey(survey, selectedTier);
+    : generatePlanFromSurvey(survey, selectedTier, selectedTier === 'bundle_general' ? 'general' : 'small', selectedAddons);
+
+  // 基础核心服务项目（固定高度，不因下方增值服务勾选而增减行，避免上下抖动）
+  const basePackageItems = activePlan.items.filter(item => !item.id.startsWith('addon-'));
 
   return (
     <div className="pb-32">
@@ -83,20 +127,19 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
       <div className="relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
           
-          {/* Hero Section */}
-          <section className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+          {/* Top Step Heading - states current step clearly */}
+          <section className="mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>定制方案 · 专属企业设立方案与透明报价</span>
+              <span>第 2 步 · 方案与报价确认</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-              量身定制，<br />
-              <span className="text-[#48BFA2]">专属设立方案与透明报价</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
+              第 2 步：确认服务方案与费用明细
             </h1>
 
-            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-              系统已根据您的业务画像（{survey.companyDesc.slice(0, 20)}…）、经营范围规划与财税要求，精准匹配新《公司法》规范，为您生成定制办理方案及明细报价。
+            <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
+              系统已根据您的业务特征与财税要求生成建议方案。您可以在此切换套餐，自选增值服务支持按单列灵活勾选，确认后即可进入协议确认与开办办理。
             </p>
           </section>
 
@@ -219,7 +262,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
             {/* 3 distinct service packages in clean, balanced grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5 items-stretch">
               
-              {/* Package 1: 标准套餐 */}
+              {/* Package 1: 企业注册服务 */}
               <div
                 id="tier-card-standard"
                 onClick={() => handleTierSelect('standard')}
@@ -241,7 +284,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-black text-[#0F172A]">标准设立套餐</h3>
+                  <h3 className="text-lg font-black text-[#0F172A]">企业注册服务</h3>
                   <p className="text-xs text-slate-400 mt-1 mb-3">已有专职财务人员，仅委托办理执照与印章</p>
 
                   <div className="py-3 my-3 border-y border-slate-100 flex items-baseline justify-between">
@@ -303,7 +346,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 </div>
               </div>
 
-              {/* Package 2: 全年无忧小规模全包 - 默认推荐 */}
+              {/* Package 2: 全年无忧服务（小规模） */}
               <div
                 id="tier-card-bundle-small"
                 onClick={() => handleTierSelect('bundle_small')}
@@ -316,7 +359,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E6F7F2] text-[#2AA894]">
-                      ★ 95%初创首选 · 小规模
+                      ★ 推荐 · 包含企业注册套餐
                     </span>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
                       selectedTier === 'bundle_small' ? 'bg-[#36B39E] border-[#36B39E] text-white shadow-2xs' : 'border-slate-300 bg-white'
@@ -325,43 +368,48 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-black text-[#0F172A]">全年无忧小规模全包</h3>
-                  <p className="text-xs text-slate-400 mt-1 mb-3">含工商设立、芯片印章及全年12个月记账托管</p>
+                  <h3 className="text-lg font-black text-[#0F172A]">全年无忧服务（小规模）</h3>
+                  <p className="text-xs text-slate-500 mt-1 mb-2">含工商设立、芯片印章及全年12个月记账托管</p>
 
-                  <div className="py-3 my-3 border-y border-slate-100 flex items-baseline justify-between">
+                  <div className="mb-3 px-2.5 py-1.5 rounded-lg bg-emerald-50/80 border border-emerald-200/80 text-[11px] text-emerald-800 font-semibold flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>强调内含：【企业注册服务】全套（执照+5章）</span>
+                  </div>
+
+                  <div className="py-3 my-2 border-y border-slate-100 flex items-baseline justify-between">
                     <div className="flex items-baseline gap-1">
                       <span className="text-xs font-bold text-slate-400">¥</span>
                       <span className="text-2xl sm:text-3xl font-black text-[#36B39E]">
                         2,500
                       </span>
-                      <span className="text-xs text-slate-400 line-through ml-1.5">¥ 8,400</span>
+                      <span className="text-xs text-slate-400 line-through ml-1.5">¥ 6,500</span>
                     </div>
                     <span className="text-[11px] font-bold text-[#2AA894] bg-[#E6F7F2] px-2 py-0.5 rounded-full">
-                      立省 ¥5,900
+                      立省 ¥4,000
                     </span>
                   </div>
 
                   {/* Clean, single-line features */}
                   <ul className="space-y-2.5 text-xs text-slate-700 my-4">
-                    <li className="flex items-center gap-2">
+                    <li className="flex items-center gap-2 font-medium text-emerald-900">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>标准设立全套（执照正副本 + 芯片5章）</span>
+                      <span>【含企业注册】全程网申与执照正副本领办</span>
+                    </li>
+                    <li className="flex items-center gap-2 font-medium text-emerald-900">
+                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
+                      <span>【含企业注册】公安备案防伪芯片印章5枚</span>
+                    </li>
+                    <li className="flex items-center gap-2 font-medium text-emerald-900">
+                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
+                      <span>【含企业注册】市监局行政审批规费全免</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>合作银行开户绿色通道（专人免排队）</span>
+                      <span>小规模代账报税托管 <strong className="text-blue-600 font-normal">（全年12个月）</strong></span>
                     </li>
-                    <li className="flex items-center gap-2">
+                    <li className="flex items-center gap-2 font-medium text-emerald-800">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>电子税务局开户与税种核定</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>小规模记账报税托管 <strong className="text-blue-600 font-normal">（全年12个月）</strong></span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>单位社保与公积金独立开户及月度托管</span>
+                      <span>【套餐全包】已默认全含4项自选增值服务（全部免费）</span>
                     </li>
                   </ul>
                 </div>
@@ -387,7 +435,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 </div>
               </div>
 
-              {/* Package 3: 全年无忧一般人全包 */}
+              {/* Package 3: 全年无忧服务（一般纳税人） */}
               <div
                 id="tier-card-bundle-general"
                 onClick={() => handleTierSelect('bundle_general')}
@@ -400,7 +448,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
-                      专票抵扣 · 一般纳税人
+                      专票抵扣 · 包含企业注册套餐
                     </span>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
                       selectedTier === 'bundle_general' ? 'bg-[#36B39E] border-[#36B39E] text-white shadow-2xs' : 'border-slate-300 bg-white'
@@ -409,43 +457,48 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-black text-[#0F172A]">一般人全包套餐</h3>
-                  <p className="text-xs text-slate-400 mt-1 mb-3">需开具专票、有进项税额抵扣需求的成长型企业</p>
+                  <h3 className="text-lg font-black text-[#0F172A]">全年无忧服务（一般纳税人）</h3>
+                  <p className="text-xs text-slate-500 mt-1 mb-2">需开具专票、有进项税额抵扣需求的成长型企业</p>
 
-                  <div className="py-3 my-3 border-y border-slate-100 flex items-baseline justify-between">
+                  <div className="mb-3 px-2.5 py-1.5 rounded-lg bg-blue-50/80 border border-blue-200/80 text-[11px] text-blue-800 font-semibold flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                    <span>强调内含：【企业注册服务】全套（执照+5章）</span>
+                  </div>
+
+                  <div className="py-3 my-2 border-y border-slate-100 flex items-baseline justify-between">
                     <div className="flex items-baseline gap-1">
                       <span className="text-xs font-bold text-slate-400">¥</span>
                       <span className={`text-2xl sm:text-3xl font-black ${selectedTier === 'bundle_general' ? 'text-[#36B39E]' : 'text-[#0F172A]'}`}>
                         3,000
                       </span>
-                      <span className="text-xs text-slate-400 line-through ml-1.5">¥ 9,400</span>
+                      <span className="text-xs text-slate-400 line-through ml-1.5">¥ 7,500</span>
                     </div>
                     <span className="text-[11px] font-bold text-[#2AA894] bg-[#E6F7F2] px-2 py-0.5 rounded-full">
-                      立省 ¥6,400
+                      立省 ¥4,500
                     </span>
                   </div>
 
                   {/* Clean, single-line features */}
                   <ul className="space-y-2.5 text-xs text-slate-700 my-4">
-                    <li className="flex items-center gap-2">
+                    <li className="flex items-center gap-2 font-medium text-blue-900">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>标准设立全套（执照正副本 + 芯片5章）</span>
+                      <span>【含企业注册】全程网申与执照正副本领办</span>
+                    </li>
+                    <li className="flex items-center gap-2 font-medium text-blue-900">
+                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
+                      <span>【含企业注册】公安备案防伪芯片印章5枚</span>
+                    </li>
+                    <li className="flex items-center gap-2 font-medium text-blue-900">
+                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
+                      <span>【含企业注册】市监局行政审批规费全免</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>合作银行开户绿色通道（专人免排队）</span>
+                      <span>进项发票抵扣与专票代账 <strong className="text-blue-600 font-normal">（全年12个月）</strong></span>
                     </li>
-                    <li className="flex items-center gap-2">
+                    <li className="flex items-center gap-2 font-medium text-blue-900">
                       <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>增值税一般人认定与开票额度核定</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>专票记账与进项认证抵扣 <strong className="text-blue-600 font-normal">（全年12个月）</strong></span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#36B39E] shrink-0" />
-                      <span>单位社保与公积金独立开户及月度托管</span>
+                      <span>【套餐全包】已默认全含4项自选增值服务（全部免费）</span>
                     </li>
                   </ul>
                 </div>
@@ -482,9 +535,9 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   <Receipt className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-[#0F172A]">服务项目与透明报价清单</h2>
+                  <h2 className="text-base sm:text-lg font-bold text-[#0F172A]">03 · 服务项目与透明报价清单</h2>
                   <span className="text-xs text-slate-400">
-                    按照所选服务呈现明细清单 · 该免费的就全额免费 · 绝无后续二次隐形收费
+                    呈现核心开办服务明细 · 绝无后续隐形收费
                   </span>
                 </div>
               </div>
@@ -499,19 +552,22 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               <div className="flex items-center gap-2 text-xs flex-wrap">
                 <span className="text-slate-500 whitespace-nowrap">当前计算清单所选方案：</span>
                 <span className="font-bold text-[#0F172A] bg-white px-2.5 py-1 rounded-lg border border-slate-200 whitespace-nowrap shadow-2xs">
-                  {activePlan.tierName}（¥ {formatMoney(activePlan.finalPrice)} 元）
+                  {activePlan.tierName}
+                </span>
+                <span className="text-xs text-slate-500">
+                  套餐基础标价：¥ {selectedTier === 'standard' ? '600' : selectedTier === 'bundle_small' ? '2,500' : '3,000'} 元
                 </span>
               </div>
               <div className="text-xs text-[#2AA894] font-medium leading-normal">
                 {selectedTier === 'standard'
-                  ? '包含：工商代办及营业执照正副本、公安备案防伪芯片印章全套'
-                  : '包含：工商设立、印章全套、银行绿色通道、电子税局、社保公积金开户、全年代账及托管'}
+                  ? '包含：企业注册服务（执照正副本+公安防伪5枚印章+规费全免）'
+                  : '包含：企业注册服务全套 + 全年12个月记账托管服务'}
               </div>
             </div>
 
             {/* Itemized List */}
             <div className="divide-y divide-slate-100">
-              {activePlan.items.map((item) => (
+              {basePackageItems.map((item) => (
                 <div key={item.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-start gap-3">
                     <div className={`mt-0.5 w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
@@ -556,7 +612,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
             <div className="mt-4 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center gap-2.5 text-xs text-emerald-800">
               <Info className="w-4 h-4 text-[#36B39E] shrink-0" />
               <span>
-                <strong>透明报价承诺：</strong>公安特行备案防伪芯片印章全套全免（¥0）、市监局政务审批规费全免（¥0）。所选套餐外绝无任何巧立名目二次收费。
+                <strong>透明报价承诺：</strong>公安特行备案防伪芯片印章全套全免（¥0）、市监局政务审批规费全免（¥0）。自选增值服务严格按照统一透明标价结算，绝无任何隐形二次收费。
               </span>
             </div>
 
@@ -572,10 +628,10 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   {selectedTier === 'standard'
-                    ? '包含：全程政务网申代办、营业执照正副本原件申领、公安备案防伪芯片印章全套5枚及政务规费减免'
+                    ? '已选【企业注册服务】：全程政务网申代办、营业执照正副本原件申领、公安备案防伪芯片印章全套5枚及市监规费全免。'
                     : selectedTier === 'bundle_small'
-                    ? '包含：网申执照、防伪芯片五章、银行通道、电子税局、社保公积金开户、全年12个月小规模记账报税与托管'
-                    : '包含：网申执照、防伪芯片五章、银行通道、一般人税局认定、社保公积金开户、全年12个月专票记账报税与托管'}
+                    ? '已选【全年无忧服务（小规模）】：内含【企业注册服务】全套（执照+防伪芯片五章+规费减免）及全年12个月小规模记账报税。'
+                    : '已选【全年无忧服务（一般纳税人）】：内含【企业注册服务】全套（执照+防伪芯片五章+规费减免）及全年12个月一般人记账及专票抵扣。'}
                 </p>
               </div>
 
@@ -589,12 +645,163 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
             </div>
           </div>
 
-          {/* ==================== 04 交付清单与物料凭据 ==================== */}
+          {/* ==================== 04 自选增值服务（按需单列勾选） ==================== */}
+          <div className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#E6F7F2] flex items-center justify-center text-[#36B39E]">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-base sm:text-lg font-bold text-[#0F172A]">04 · 自选增值服务（按需单列勾选）</h2>
+                    <span className="text-[11px] font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+                      {selectedTier === 'standard' ? '统一透明标价 · 默认不勾选 · 按需加购' : '全年无忧套餐已全包 · 全部免费'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {selectedTier === 'standard' 
+                      ? '企业注册服务默认不包含以下增值服务。如您需要，可直接点击单列开关按需勾选开启，费用将实时计入结算总额。' 
+                      : '全年无忧套餐默认包含全部自选服务且全额免费（¥0）。关闭任意项目不减价。'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Notification Banner depending on tier */}
+            {selectedTier !== 'standard' && (
+              <div className="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 flex items-start gap-2.5 text-xs text-emerald-950 mb-4">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="leading-relaxed">
+                  <span className="font-bold text-emerald-900">【全年无忧服务】全包优惠提示：</span>
+                  <span className="text-emerald-800">
+                    当前套餐已<strong>默认全包包含以下全部自选服务</strong>，且<strong>全部免费（¥0）</strong>。如您某项业务已自行办理可随时取消勾选；但因本套餐为官方一口价整体服务，<strong>关闭任意自选服务均不减扣套餐总价</strong>。
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Single column list */}
+            <div className="space-y-3">
+              {OPTIONAL_ADDON_SERVICES.map((addon) => {
+                const isSelected = selectedAddons.includes(addon.id);
+                const isBundle = selectedTier !== 'standard';
+
+                return (
+                  <div
+                    key={addon.id}
+                    onClick={() => handleToggleAddon(addon.id)}
+                    className={`p-4 sm:p-4.5 rounded-2xl border-2 transition-colors duration-150 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 select-none ${
+                      isSelected
+                        ? isBundle 
+                          ? 'border-emerald-500 bg-emerald-50/40 shadow-xs'
+                          : 'border-[#36B39E] bg-[#F4FCFA] shadow-xs'
+                        : 'border-slate-200 bg-slate-50/40 hover:border-slate-300 hover:bg-white'
+                    }`}
+                  >
+                    {/* Left: Checkbox + Info */}
+                    <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                      <div className={`mt-0.5 w-5 h-5 rounded-lg border-2 flex items-center justify-center shrink-0 transition-colors ${
+                        isSelected
+                          ? isBundle ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-[#36B39E] border-[#36B39E] text-white'
+                          : 'border-slate-300 bg-white'
+                      }`}>
+                        {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className={`text-sm font-bold ${isSelected ? 'text-[#0F172A]' : 'text-slate-700'}`}>
+                            {addon.name}
+                          </span>
+                          
+                          {isBundle ? (
+                            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap border ${
+                              isSelected
+                                ? 'text-emerald-800 bg-emerald-100/90 border-emerald-300'
+                                : 'text-slate-500 bg-slate-200/80 border-transparent'
+                            }`}>
+                              {isSelected ? '套餐已全包 · ¥0 (免费)' : '已关闭 · 关闭不减价'}
+                            </span>
+                          ) : (
+                            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap border ${
+                              isSelected 
+                                ? 'bg-[#36B39E] text-white border-[#36B39E]' 
+                                : 'bg-slate-200 text-slate-700 border-transparent'
+                            }`}>
+                              ¥ {addon.price} / {addon.unit}
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          {addon.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right: Price & Toggle Switch */}
+                    <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 pl-8 sm:pl-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
+                      <div className="text-right min-w-[90px]">
+                        {isBundle ? (
+                          <div className="flex sm:flex-col items-center sm:items-end gap-1.5 sm:gap-0">
+                            <span className="text-sm sm:text-base font-black text-emerald-600 leading-tight">
+                              {isSelected ? '¥ 0 (免费)' : '不办理'}
+                            </span>
+                            <span className="text-[11px] text-slate-400 line-through leading-tight">
+                              原价 ¥{addon.price}/{addon.unit}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex sm:flex-col items-center sm:items-end gap-1.5 sm:gap-0">
+                            <span className="text-sm sm:text-base font-black text-slate-900 leading-tight">
+                              ¥ {addon.price}
+                            </span>
+                            <span className="text-[11px] text-slate-400 leading-tight">
+                              / {addon.unit}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div
+                        className={`w-11 h-6 rounded-full transition-colors relative flex items-center p-0.5 cursor-pointer shrink-0 ${
+                          isSelected ? (isBundle ? 'bg-emerald-600' : 'bg-[#36B39E]') : 'bg-slate-300'
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform transform duration-150 ${
+                            isSelected ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Stable In-place summary for standard tier */}
+            {selectedTier === 'standard' && (
+              <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <span className="text-slate-500">
+                  已按需加购自选服务：<strong className="text-[#2AA894] font-bold">{selectedAddons.length}</strong> 项
+                  {selectedAddons.length > 0 && `（加购小计：¥ ${formatMoney(activePlan.finalPrice - 600)} 元）`}
+                </span>
+                <span className="font-semibold text-slate-800">
+                  当前方案总计：<strong className="text-[#36B39E] text-sm font-bold">¥ {formatMoney(activePlan.finalPrice)}</strong> 元
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* ==================== 05 交付清单与物料凭据 ==================== */}
           <div className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs">
             <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-                <span>交付清单</span>
+                <span>05 · 交付清单</span>
               </div>
               <span className="text-xs text-[#2AA894] font-semibold">办结出件成果物</span>
             </div>

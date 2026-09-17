@@ -141,20 +141,19 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
       <div className="relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
 
-          {/* Hero Section */}
-          <section className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+          {/* Top Step Heading - states current step clearly */}
+          <section className="mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>申报阶段 · U-S 填写企业注册信息与上传资料</span>
+              <span>企业注册资料填报</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-              政务申报，<br />
-              <span className="text-[#48BFA2]">企业登记信息与资料归集上传</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
+              填写企业注册登记信息与上传申报资料
             </h1>
 
-            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-              请准确录入企业字号申报信息、董监高人员架构并上传证件原件扫描件，提交后系统将即时提醒客服专员开展合规核验。
+            <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
+              请录入企业申报名称、主要人员与注册资本架构，并上传身份证明等申办所需文件。提交后政务专员将为您启动核验与政务申报。
             </p>
           </section>
 

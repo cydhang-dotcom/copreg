@@ -35,6 +35,15 @@ export interface QuotationItem {
 
 export type ServiceTierType = 'standard' | 'bundle_small' | 'bundle_general';
 
+export interface OptionalAddonService {
+  id: string;
+  name: string;
+  desc: string;
+  price: number;
+  unit: string;
+  defaultSelected?: boolean;
+}
+
 export interface RegistrationPlan {
   selectedTier: ServiceTierType;
   taxpayerTier: 'small' | 'general';
@@ -50,6 +59,7 @@ export interface RegistrationPlan {
   postQualifications: string[];
   riskTips: string[];
   items: QuotationItem[];
+  selectedAddons?: string[];
   totalOriginal: number;
   totalDiscount: number;
   finalPrice: number;

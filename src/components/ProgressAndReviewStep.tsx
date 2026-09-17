@@ -122,20 +122,19 @@ export const ProgressAndReviewStep: React.FC<ProgressAndReviewStepProps> = ({
       <div className="relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
 
-          {/* Hero Section */}
-          <section className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+          {/* Top Step Heading - states current step clearly */}
+          <section className="mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>进度看板 · 交付全景看板</span>
+              <span>办理进度追踪</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-              全景透明，<br />
-              <span className="text-[#48BFA2]">交付进度追踪与双分支核验</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
+              企业开办与政务交付办理进度
             </h1>
 
-            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-              实时联动客服团队初审（C）、政务交付部网申立项（D）及市政务大数据中心，全程清晰透明无断点。
+            <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
+              实时追踪客服初审、市监局政务网申审批、公安备案印章刻制及物流进度。
             </p>
           </section>
 

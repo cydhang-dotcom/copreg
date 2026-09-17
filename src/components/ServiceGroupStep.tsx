@@ -69,20 +69,19 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
       <div className="relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
 
-          {/* Hero Section */}
-          <section className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3.5 select-none">
+          {/* Top Step Heading - states current step clearly */}
+          <section className="mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>协同阶段 · C-U 建立专属服务群（含 AI 助手）</span>
+              <span>专属服务群</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-3.5">
-              团队就位，<br />
-              <span className="text-[#48BFA2]">专属服务保障群与节点告知</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mb-2">
+              专属服务保障群（含专员与智能助手）
             </h1>
 
-            <p className="text-sm sm:text-[14.5px] text-[#64748B] max-w-2xl leading-relaxed">
-              客服顾问 Lisa、交付主管张经理与 7×24 小时智能 AI 助手已全部在群。办理节点、资料规范与常见疑虑均可实时解答。
+            <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
+              服务顾问、交付主管与智能助手已就位。办理节点、资料规范与常见问题可在此交流答疑。
             </p>
           </section>
 
