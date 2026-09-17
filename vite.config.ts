@@ -5,7 +5,24 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    base: '/copreg/',
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'redirect-root-to-copreg',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url === '/' || req.url === '') {
+              res.writeHead(302, { Location: '/copreg/' });
+              res.end();
+              return;
+            }
+            next();
+          });
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
