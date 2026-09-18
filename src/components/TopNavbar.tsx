@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { ProcessStep } from '../types';
-import { Home, ShieldCheck } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface TopNavbarProps {
   currentStep?: ProcessStep;
@@ -27,22 +27,22 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           className="flex items-center gap-2.5 cursor-pointer group shrink-0"
         >
           <div className="w-8 h-8 rounded-xl bg-[#E6F7F2] flex items-center justify-center text-[#2AA894]">
-            <Home className="w-4 h-4 stroke-[1.8]" />
+            <Sparkles className="w-4 h-4 stroke-[2]" />
           </div>
           <div>
-            <div className="font-bold text-slate-800 text-sm leading-tight">
-              企业设立需求调查
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-slate-800 text-sm leading-tight">
+                企业注册向导
+              </span>
+              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#2AA894]/30 leading-none">
+                <Sparkles className="w-2.5 h-2.5 text-[#2AA894]" />
+                AI
+              </span>
             </div>
             <div className="text-[10px] tracking-wide text-slate-400 font-medium uppercase">
-              Business Setup
+              AI Registration Guide
             </div>
           </div>
-        </div>
-
-        {/* Right: Clean Security Badge */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 border border-slate-200/60 px-3 py-1 rounded-full select-none">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#2AA894]" />
-          <span>政务直通 · 资金托管</span>
         </div>
 
       </div>

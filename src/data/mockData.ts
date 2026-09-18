@@ -182,12 +182,12 @@ export const AI_INDUSTRY_TEMPLATES = [
 
 export const DEFAULT_AI_TEMPLATE = AI_INDUSTRY_TEMPLATES[0];
 
-export const ALL_ADDON_IDS = ['addon-bank', 'addon-tax', 'addon-social', 'addon-custody'];
+export const ALL_ADDON_IDS = ['addon-bank', 'addon-tax', 'addon-social'];
 
 export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
   {
     id: 'addon-bank',
-    name: '银行对公账户预约开户绿色通道',
+    name: '银行对公账户开通',
     desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
     price: 200,
     unit: '次',
@@ -195,7 +195,7 @@ export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
   },
   {
     id: 'addon-tax',
-    name: '电子税务局开户与首月财税合规包',
+    name: '电子税务局开户',
     desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
     price: 300,
     unit: '次',
@@ -203,18 +203,10 @@ export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
   },
   {
     id: 'addon-social',
-    name: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立',
+    name: '办理社保公积金开户',
     desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
     price: 200,
     unit: '次',
-    defaultSelected: false
-  },
-  {
-    id: 'addon-custody',
-    name: '社保公积金账号托管（不含员工增减员及代缴）',
-    desc: '社保公积金系统企业专属专户全年合规状态维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
-    price: 1000,
-    unit: '年',
     defaultSelected: false
   }
 ];
@@ -254,10 +246,10 @@ export function generatePlanFromSurvey(
   const isBundle = normalizedTier !== 'standard';
   const autoTaxpayerTier: 'small' | 'general' = isGeneral ? 'general' : 'small';
 
-  // 全年无忧服务：默认包含所有自选服务；企业注册服务默认不包含
-  const activeAddons: string[] = userSelectedAddons !== undefined
-    ? userSelectedAddons
-    : (isBundle ? [...ALL_ADDON_IDS] : []);
+  // 全年无忧服务：银行开户、税局开户、社保公积金开户及社保公积金服务已全部作为必选/默认服务内置于套餐内
+  const activeAddons: string[] = normalizedTier === 'standard'
+    ? (userSelectedAddons || [])
+    : [];
 
   let items = [];
   let tierName = '';
@@ -336,6 +328,42 @@ export function generatePlanFromSurvey(
         price: 2500,
         originalPrice: 4800,
         tag: '小规模记账托管 ¥2,500'
+      },
+      {
+        id: 'item-bnd-bank',
+        name: '银行对公账户开通',
+        desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
+        price: 0,
+        originalPrice: 200,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-tax',
+        name: '电子税务局开户',
+        desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
+        price: 0,
+        originalPrice: 300,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-social-setup',
+        name: '办理社保公积金开户',
+        desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
+        price: 0,
+        originalPrice: 200,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-social-service',
+        name: '社保公积金服务',
+        desc: '社保公积金系统企业专属专户全年合规状态维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
+        price: 0,
+        originalPrice: 1000,
+        isFree: true,
+        tag: '全年无忧默认服务'
       }
     ];
 
@@ -343,7 +371,10 @@ export function generatePlanFromSurvey(
       '营业执照正副本（纸质原件 + 电子营业执照）【包含企业注册套餐】',
       '公安备案防伪芯片印章5枚（公章、财务章、发票章、合同章、法人章）【包含企业注册套餐】',
       '公司章程及股东会决议书（工商归档备案全套版）【包含企业注册套餐】',
-      '全年小规模财务代记账服务协议与12期财务凭证账簿及纳税申报表'
+      '全年小规模财务代记账服务协议与12期财务凭证账簿及纳税申报表',
+      '银行基本户开户信息表与网银U盾',
+      '电子税务局企业身份开通与新电局实名绑定凭据',
+      '企业社保与住房公积金独立单位专户设立凭据'
     ];
   } else {
     tierName = '全年无忧服务（一般纳税人）';
@@ -382,6 +413,42 @@ export function generatePlanFromSurvey(
         price: 3000,
         originalPrice: 5800,
         tag: '一般人记账托管 ¥3,000'
+      },
+      {
+        id: 'item-bnd-bank',
+        name: '银行对公账户开通',
+        desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
+        price: 0,
+        originalPrice: 200,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-tax',
+        name: '电子税务局开户',
+        desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
+        price: 0,
+        originalPrice: 300,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-social-setup',
+        name: '办理社保公积金开户',
+        desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
+        price: 0,
+        originalPrice: 200,
+        isFree: true,
+        tag: '全年无忧必选服务'
+      },
+      {
+        id: 'item-bnd-social-service',
+        name: '社保公积金服务',
+        desc: '社保公积金系统企业专属专户全年合规状态维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
+        price: 0,
+        originalPrice: 1000,
+        isFree: true,
+        tag: '全年无忧默认服务'
       }
     ];
 
@@ -389,57 +456,47 @@ export function generatePlanFromSurvey(
       '营业执照正副本（纸质原件 + 电子营业执照）【包含企业注册套餐】',
       '公安备案防伪芯片印章5枚（公章、财务章、发票章、合同章、法人章）【包含企业注册套餐】',
       '公司章程及股东会决议书（工商归档备案全套版）【包含企业注册套餐】',
-      '全年一般纳税人财务代记账服务协议与12期财务账簿及专票申报底稿'
+      '全年一般纳税人财务代记账服务协议与12期财务账簿及专票申报底稿',
+      '银行基本户开户信息表与网银U盾',
+      '电子税务局企业身份开通与新电局实名绑定凭据',
+      '企业社保与住房公积金独立单位专户设立凭据'
     ];
   }
 
-  // 自选增值服务：在全年无忧套餐中全包免费（¥0），关闭也不减价；在企业注册服务中按需单项计费
-  if (activeAddons.includes('addon-bank')) {
-    items.push({
-      id: 'addon-bank',
-      name: '银行对公账户预约开户绿色通道',
-      desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
-      price: isBundle ? 0 : 200,
-      originalPrice: 400,
-      isFree: isBundle,
-      tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥200/次'
-    });
-  }
+  // 自选增值服务：仅在企业注册服务中提供可选加购（银行开户、税局开户、社保公积金开户）
+  if (normalizedTier === 'standard') {
+    if (activeAddons.includes('addon-bank')) {
+      items.push({
+        id: 'addon-bank',
+        name: '银行对公账户开通',
+        desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
+        price: 200,
+        originalPrice: 400,
+        tag: '自选增值 ¥200/次'
+      });
+    }
 
-  if (activeAddons.includes('addon-tax')) {
-    items.push({
-      id: 'addon-tax',
-      name: '电子税务局开户与首月财税合规包',
-      desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
-      price: isBundle ? 0 : 300,
-      originalPrice: 500,
-      isFree: isBundle,
-      tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥300/次'
-    });
-  }
+    if (activeAddons.includes('addon-tax')) {
+      items.push({
+        id: 'addon-tax',
+        name: '电子税务局开户',
+        desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
+        price: 300,
+        originalPrice: 500,
+        tag: '自选增值 ¥300/次'
+      });
+    }
 
-  if (activeAddons.includes('addon-social')) {
-    items.push({
-      id: 'addon-social',
-      name: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立',
-      desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立',
-      price: isBundle ? 0 : 200,
-      originalPrice: 500,
-      isFree: isBundle,
-      tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥200/次'
-    });
-  }
-
-  if (activeAddons.includes('addon-custody')) {
-    items.push({
-      id: 'addon-custody',
-      name: '社保公积金账号托管（不含员工增减员及代缴）',
-      desc: '社保公积金独立单位专户系统全年合规维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
-      price: isBundle ? 0 : 1000,
-      originalPrice: 1500,
-      isFree: isBundle,
-      tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥1,000/年'
-    });
+    if (activeAddons.includes('addon-social')) {
+      items.push({
+        id: 'addon-social',
+        name: '办理社保公积金开户',
+        desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
+        price: 200,
+        originalPrice: 500,
+        tag: '自选增值 ¥200/次'
+      });
+    }
   }
 
   const totalOriginal = items.reduce((sum, it) => sum + it.originalPrice, 0);

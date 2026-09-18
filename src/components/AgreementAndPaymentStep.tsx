@@ -27,7 +27,8 @@ import {
   X,
   AlertCircle,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  FileEdit
 } from 'lucide-react';
 
 interface AgreementAndPaymentStepProps {
@@ -65,6 +66,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   const [hasAgreed, setHasAgreed] = useState(true);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [showServiceContentModal, setShowServiceContentModal] = useState(false);
+  const [showWecomModal, setShowWecomModal] = useState(false);
 
   // Payment method
   const [payMethod, setPayMethod] = useState<'wechat' | 'alipay'>(
@@ -125,12 +127,12 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   // Checklist items for post-payment status display
   const checklistItems = [
     {
-      title: '【核心前置】企业注册申报资料在线填报与合规初审',
-      desc: '在线登记企业备选字号、股东股权架构、法人/监事实名信息及经营场所证明。专属顾问在您提交后 2 小时内完成合规审核。审核通过后即刻启动后续各项政务审批与代办服务。',
+      title: '企业注册申报资料在线填报与合规初审',
+      desc: '在线登记企业备选字号、股东股权架构、法人/监事实名信息及经营场所证明。专属顾问在您提交后 2 小时内完成合规审核并推进后续各项审批。',
       status: 'in_progress',
-      statusLabel: '等待填报与初审',
-      dept: '经办人在线填报 / 专属团队',
-      time: '第一步（必经前置）',
+      statusLabel: '进行中 · 待填报',
+      dept: '当前任务 / 经办人在线填报',
+      time: '第一步（当前阶段）',
       isPrereq: true
     },
     {
@@ -417,108 +419,117 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
             /* ======================================================= */
             /* ==================== STATE 2: PAID ==================== */
             /* ======================================================= */
-            <div className="space-y-5">
-              {/* Success Banner */}
-              <div className="rounded-2xl p-5 sm:p-6 border border-emerald-200/80 bg-emerald-50/20">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-emerald-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center">
-                      <Check className="w-5 h-5 stroke-[2.5]" />
-                    </div>
-                    <div>
-                      <div className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full mb-1">
-                        支付成功 · 委托代办已生效
+            <div className="space-y-4">
+              {/* ==================== BEAUTIFIED WELCOME HERO CARD ==================== */}
+              <div className="relative overflow-hidden rounded-2xl p-6 sm:p-7 border border-emerald-200/90 bg-gradient-to-br from-[#F0FDF4]/90 via-white to-[#F0FDF9] shadow-sm">
+                {/* Subtle decorative glow accents */}
+                <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-100/35 rounded-full blur-3xl -mr-24 -mt-24 pointer-events-none" />
+                <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#E6F7F2]/40 rounded-full blur-2xl -mb-20 pointer-events-none" />
+
+                <div className="relative z-10">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 pb-5 border-b border-emerald-100/80">
+                    <div className="flex items-start sm:items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#2AA894] to-[#36B39E] text-white flex items-center justify-center shadow-md shadow-emerald-600/20 ring-4 ring-emerald-100/90 shrink-0">
+                        <Check className="w-5 h-5 stroke-[2.8]" />
                       </div>
-                      <h1 className="text-lg sm:text-xl font-bold text-slate-800">
-                        欢迎使用“班步一企通”服务
-                      </h1>
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="text-xs text-slate-400">已开通服务：</span>
-                        <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2 py-0.5 rounded-md border border-[#36B39E]/30">
-                          {plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
-                        </span>
-                        {plan.selectedAddons && plan.selectedAddons.length > 0 && (
-                          <span className="text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
-                            已含 {plan.selectedAddons.length} 项自选增值服务
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full mb-1.5 border border-emerald-200/60">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>支付成功 · 委托代办已生效</span>
+                        </div>
+                        <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+                          欢迎使用“班步一企通”服务
+                        </h1>
+                        <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                          <span className="text-xs text-slate-400 font-medium">已开通服务：</span>
+                          <span className="text-xs font-bold text-[#1D6C5E] bg-white px-2.5 py-1 rounded-lg border border-[#2AA894]/30 shadow-2xs">
+                            {plan.tierName || (plan.selectedTier === 'standard' ? '企业注册服务' : plan.selectedTier === 'bundle_general' ? '全年无忧服务（一般纳税人）' : '全年无忧服务（小规模）')}
                           </span>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => setShowServiceContentModal(true)}
-                          className="inline-flex items-center gap-1 text-xs text-[#2AA894] hover:text-[#238b7a] bg-white border border-[#36B39E]/40 px-2.5 py-0.5 rounded-full cursor-pointer transition-colors"
-                        >
-                          <FileText className="w-3.5 h-3.5 text-[#36B39E]" />
-                          <span>服务内容详情</span>
-                          <ChevronRight className="w-3 h-3" />
-                        </button>
+                          {plan.selectedAddons && plan.selectedAddons.length > 0 && (
+                            <span className="text-xs font-medium text-blue-700 bg-white px-2.5 py-1 rounded-lg border border-blue-200/80 shadow-2xs">
+                              含 {plan.selectedAddons.length} 项自选增值服务
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setShowServiceContentModal(true)}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-[#2AA894] hover:text-[#1D6C5E] bg-white hover:bg-emerald-50/50 border border-[#36B39E]/35 px-3 py-1 rounded-lg cursor-pointer transition-all shadow-2xs"
+                          >
+                            <FileText className="w-3.5 h-3.5 text-[#36B39E]" />
+                            <span>服务内容详情</span>
+                            <ChevronRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-left sm:text-right shrink-0 bg-white/60 sm:bg-transparent p-3 sm:p-0 rounded-xl border border-emerald-100/60 sm:border-0 w-full sm:w-auto">
+                      <span className="text-xs text-slate-400 block font-medium">
+                        实付金额（{order?.paymentMethod === 'alipay' ? '支付宝' : '微信支付'}）
+                      </span>
+                      <div className="flex items-baseline sm:justify-end gap-0.5 mt-0.5">
+                        <span className="text-sm font-bold text-[#2AA894]">¥</span>
+                        <span className="text-2xl sm:text-3xl font-black text-[#1D6C5E] tracking-tight">
+                          {formatMoney(order?.amount ?? finalPrice)}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-left sm:text-right">
-                    <span className="text-xs text-slate-400 block">实付金额（{order?.paymentMethod === 'alipay' ? '支付宝' : '微信支付'}）</span>
-                    <span className="text-xl font-black text-[#36B39E]">¥{formatMoney(order?.amount ?? finalPrice)}</span>
-                  </div>
-                </div>
 
-                <div className="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600">
-                  <div>
-                    <span className="text-slate-400 block mb-0.5">订单编号</span>
-                    <span className="font-medium text-slate-800">{order.orderNo}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-0.5">经办人姓名</span>
-                    <span className="font-medium text-slate-800">{order.contactName}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-0.5">经办联系电话</span>
-                    <span className="font-medium text-slate-800">{order.contactPhone}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-0.5">支付时间</span>
-                    <span className="font-medium text-slate-800">{order.paidAt || '刚刚完成'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Requirement: Enterprise WeChat Customer Service */}
-              <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
-                <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                      <MessageSquare className="w-4 h-4" />
+                  {/* Metadata Cards Grid */}
+                  <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div className="bg-white/80 backdrop-blur-xs rounded-xl p-2.5 border border-emerald-100/70 shadow-2xs">
+                      <span className="text-[11px] text-slate-400 block font-medium">订单编号</span>
+                      <span className="font-semibold text-slate-800 text-xs font-mono mt-0.5 block truncate">
+                        {order.orderNo}
+                      </span>
                     </div>
-                    <div>
-                      <h2 className="text-base font-bold text-slate-800">企业微信专属客服</h2>
-                      <span className="text-[11px] text-slate-400">可微信扫码添加，或等待服务专员与您联系</span>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-xl p-2.5 border border-emerald-100/70 shadow-2xs">
+                      <span className="text-[11px] text-slate-400 block font-medium">经办人姓名</span>
+                      <span className="font-semibold text-slate-800 text-xs mt-0.5 block">
+                        {order.contactName}
+                      </span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-xl p-2.5 border border-emerald-100/70 shadow-2xs">
+                      <span className="text-[11px] text-slate-400 block font-medium">经办联系电话</span>
+                      <span className="font-semibold text-slate-800 text-xs font-mono mt-0.5 block">
+                        {order.contactPhone}
+                      </span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-xl p-2.5 border border-emerald-100/70 shadow-2xs">
+                      <span className="text-[11px] text-slate-400 block font-medium">支付时间</span>
+                      <span className="font-semibold text-slate-800 text-xs mt-0.5 block truncate">
+                        {order.paidAt || '刚刚完成'}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60 font-medium">
-                    可扫码 · 或等专员致电
-                  </span>
-                </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-xl bg-slate-50/70 border border-slate-200/70">
-                  {/* QR Code Container */}
-                  <div className="w-32 h-32 bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col items-center justify-center relative shrink-0">
-                    <QrCode className="w-24 h-24 text-slate-800" />
-                    <span className="text-[10px] text-slate-400 mt-1">微信扫码添加</span>
-                  </div>
+                  {/* Integrated Dedicated Consultant Bar inside Welcome Card */}
+                  <div className="mt-3.5 pt-3.5 border-t border-emerald-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-100/80 text-[#2AA894] flex items-center justify-center shrink-0">
+                        <MessageSquare className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap min-w-0 text-xs">
+                        <span className="font-bold text-slate-800">专属顾问：李经理</span>
+                        <span className="text-[10px] text-emerald-800 bg-emerald-100/80 px-1.5 py-0.5 rounded border border-emerald-200 font-medium">
+                          企业微信官方认证
+                        </span>
+                        <span className="text-slate-300 hidden md:inline">·</span>
+                        <span className="text-[11px] text-slate-500 hidden sm:inline truncate">
+                          专员将在工作时间内主动致电协助申报代办，亦可随时微信沟通
+                        </span>
+                      </div>
+                    </div>
 
-                  <div className="space-y-1.5 text-xs text-slate-600">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-800">专属顾问：李经理（资深企业设立顾问）</span>
-                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.2 rounded border border-emerald-200/60">企业微信官方认证</span>
-                    </div>
-                    <p className="leading-relaxed text-slate-500">
-                      您可使用微信扫描左侧二维码添加专属顾问企业微信；也可以保持电话畅通，专员将在工作时间内主动致电协助开展后续所有申报代办事项。
-                    </p>
-                    <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-slate-400">
-                      <span>✓ 可手动扫码添加</span>
-                      <span>·</span>
-                      <span>✓ 或等待专员致电</span>
-                      <span>·</span>
-                      <span>✓ 纸质证照闪送</span>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowWecomModal(true)}
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50/80 text-[#1D6C5E] text-xs font-semibold border border-emerald-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer shrink-0 self-start sm:self-auto"
+                    >
+                      <QrCode className="w-3.5 h-3.5 text-[#2AA894]" />
+                      <span>微信扫码咨询</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -534,16 +545,8 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                       <h2 className="text-base font-bold text-slate-800">服务进度状态与办理清单</h2>
                     </div>
                   </div>
-                  <span className="text-xs text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/60 self-start sm:self-auto font-medium">
-                    待资料填报并审核
-                  </span>
-                </div>
-
-                {/* 前置启动规则提示 */}
-                <div className="p-3 rounded-xl bg-blue-50/60 border border-blue-200/60 mb-4 flex items-start gap-2 text-xs text-blue-900">
-                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                  <span>
-                    第 1 项【企业注册申报资料填报与初审】提交且初审通过后，代办团队将自动启动市监审批及后续刻章、开户等流程。
+                  <span className="text-xs text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/70 self-start sm:self-auto font-medium">
+                    第 1 步待填报
                   </span>
                 </div>
 
@@ -552,27 +555,28 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                   {checklistItems.map((item, index) => {
                     const isDone = item.status === 'completed';
                     const isInProgress = item.status === 'in_progress';
+                    const isCurrentActive = item.isPrereq && isInProgress;
 
                     return (
                       <div
                         key={index}
-                        className={`p-3.5 rounded-xl border transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
-                          isDone
+                        className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 ${
+                          isCurrentActive
+                            ? 'border-emerald-300/90 bg-gradient-to-r from-emerald-50/80 via-[#E6F7F2]/40 to-white shadow-2xs ring-1 ring-emerald-200/50'
+                            : isDone
                             ? 'border-emerald-200/80 bg-emerald-50/20'
-                            : isInProgress
-                            ? 'border-amber-200/80 bg-amber-50/20'
                             : 'border-slate-200/80 bg-white'
                         }`}
                       >
-                        <div className="flex items-start gap-2.5">
+                        <div className="flex items-start gap-3">
                           <div className="mt-0.5 shrink-0">
-                            {isDone ? (
+                            {isCurrentActive ? (
+                              <div className="w-5 h-5 rounded-full bg-[#2AA894] text-white flex items-center justify-center shadow-xs">
+                                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                              </div>
+                            ) : isDone ? (
                               <div className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center">
                                 <Check className="w-3 h-3 stroke-[2.5]" />
-                              </div>
-                            ) : isInProgress ? (
-                              <div className="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center animate-pulse">
-                                <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
                               </div>
                             ) : (
                               <div className="w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center text-[10px] font-medium text-slate-400">
@@ -582,38 +586,47 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                           </div>
 
                           <div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className={`text-xs font-bold ${isInProgress ? 'text-slate-800' : isDone ? 'text-emerald-900' : 'text-slate-700'}`}>
+                            <div className="flex items-center gap-2 flex-wrap mb-1">
+                              {isCurrentActive && (
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200/70">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                                  当前进行阶段
+                                </span>
+                              )}
+                              <span className={`text-xs font-bold ${isCurrentActive ? 'text-slate-800 sm:text-sm' : isDone ? 'text-emerald-900' : 'text-slate-700'}`}>
                                 {item.title}
                               </span>
                               <span className="text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.2 rounded border border-slate-200/60">
                                 {item.dept}
                               </span>
                             </div>
-                            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                            <p className={`text-xs mt-0.5 leading-relaxed ${isCurrentActive ? 'text-slate-600' : 'text-slate-400'}`}>
+                              {item.desc}
+                            </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
                           <span className="text-[11px] text-slate-400">{item.time}</span>
-                          {item.isPrereq && isInProgress && (
+                          {isCurrentActive && (
                             <button
                               type="button"
                               onClick={() => {
                                 if (onProceedToFillDetails) onProceedToFillDetails();
                               }}
-                              className="px-3 py-1 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-medium cursor-pointer transition-colors"
+                              className="px-4 py-1.5 rounded-xl bg-[#2AA894] hover:bg-[#1D6C5E] text-white font-bold text-xs shadow-sm hover:shadow transition-all cursor-pointer flex items-center gap-1"
                             >
-                              去填报
+                              <span>立即去填报</span>
+                              <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           )}
                           <span
-                            className={`px-2 py-0.5 rounded text-[11px] font-medium ${
-                              isDone
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
-                                : isInProgress
-                                ? 'bg-amber-50 text-amber-800 border border-amber-200/60'
-                                : 'bg-slate-100 text-slate-500'
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
+                              isCurrentActive
+                                ? 'bg-emerald-100/70 text-emerald-800 border-emerald-200'
+                                : isDone
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                                : 'bg-slate-100 text-slate-500 border-slate-200'
                             }`}
                           >
                             {item.statusLabel}
@@ -688,7 +701,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
               ) : (
                 <>
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>模拟完成支付（¥{formatMoney(finalPrice)}）</span>
+                  <span>确认支付（¥{formatMoney(finalPrice)}）</span>
                 </>
               )}
             </button>
@@ -905,6 +918,35 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                 关闭
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================================== */}
+      {/* ==================== MODAL: WECOM CONSULTANT QR CODE ========================= */}
+      {/* ============================================================================== */}
+      {showWecomModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-xs w-full p-5 border border-slate-200 animate-in fade-in zoom-in-95 duration-150 text-center">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-[#2AA894]" />
+                <span className="text-xs font-bold text-slate-800">专属顾问企业微信</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowWecomModal(false)}
+                className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-400 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="w-36 h-36 mx-auto bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-col items-center justify-center my-2">
+              <QrCode className="w-28 h-28 text-slate-800" />
+            </div>
+            <p className="text-xs font-semibold text-slate-800 mt-2">李经理 · 资深设立顾问</p>
+            <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 inline-block mt-1">企业微信官方认证</span>
+            <p className="text-[11px] text-slate-400 mt-2">微信扫一扫添加，专属顾问全程跟进代办</p>
           </div>
         </div>
       )}

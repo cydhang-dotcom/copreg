@@ -179,10 +179,10 @@ export const ProgressAndReviewStep: React.FC<ProgressAndReviewStepProps> = ({
                   <span>协同状态</span>
                 </div>
                 <h3 className="text-sm sm:text-base font-bold text-slate-800">
-                  资料审核与协同流转模拟
+                  资料审核与协同流转进度
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  体验状态分支：【资料齐全 · 转交政务交付】与【资料有误 · 客服提示补正】
+                  办理流转状态：支持切换查看【资料齐全 · 转交政务交付】与【资料有误 · 客服提示补正】
                 </p>
               </div>
 

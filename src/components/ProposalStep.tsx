@@ -55,14 +55,11 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
 
   const [selectedTier, setSelectedTier] = useState<ServiceTierType>(initialTier);
   const [selectedAddons, setSelectedAddons] = useState<string[]>(() => {
-    // 企业注册服务默认都是不选择的
+    // 企业注册服务：默认不勾选自选服务；全年无忧套餐已全部内置必选和默认服务
     if (initialTier === 'standard') {
-      return [];
+      return (plan.selectedAddons || []).filter(id => ALL_ADDON_IDS.includes(id));
     }
-    if (plan.selectedAddons && plan.selectedAddons.length > 0) {
-      return plan.selectedAddons;
-    }
-    return [...ALL_ADDON_IDS];
+    return [];
   });
   const [showReportModal, setShowReportModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -90,7 +87,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
     }
     setCountdown(60);
     setSmsCode('8866');
-    showToast('短信验证码已发送至您的手机：8866（已自动填入）');
+    showToast('验证码已发送');
 
     const timer = setInterval(() => {
       setCountdown((prev) => {
@@ -108,8 +105,8 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
       showToast('请输入有效的11位手机号码');
       return;
     }
-    if (!smsCode || (smsCode !== '8866' && smsCode.length < 4)) {
-      showToast('请输入短信验证码（测试环境可填 8866）');
+    if (!smsCode || smsCode.length < 4) {
+      showToast('请输入短信验证码');
       return;
     }
 
@@ -117,19 +114,19 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
     if (onUpdatePlan) {
       onUpdatePlan(activePlan);
     }
-    showToast('手机号验证通过，方案已确认！');
+    showToast('手机号验证通过');
     onProceed(phone);
   };
 
   // Handler to switch tier
   const handleTierSelect = (tier: ServiceTierType) => {
     setSelectedTier(tier);
-    // 企业注册服务：默认都是不选择的；全年无忧套餐：默认全选
+    // 企业注册服务：保留有效自选项；全年无忧套餐：已全部内置必选/默认服务，无需外挂自选项
     let nextAddons: string[];
     if (tier === 'standard') {
-      nextAddons = [];
+      nextAddons = selectedAddons.filter(id => ALL_ADDON_IDS.includes(id));
     } else {
-      nextAddons = selectedAddons.length > 0 ? selectedAddons : [...ALL_ADDON_IDS];
+      nextAddons = [];
     }
     setSelectedAddons(nextAddons);
     const updatedPlan = generatePlanFromSurvey(
@@ -360,7 +357,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </li>
                     <li className="flex items-center gap-1.5 text-slate-400 pt-1 border-t border-slate-100">
                       <span className="w-3.5 text-center text-slate-300 shrink-0">—</span>
-                      <span>不含后续代理记账</span>
+                      <span>可选加购银行开户/税局开户/社保公积金开户</span>
                     </li>
                   </ul>
                 </div>
@@ -443,7 +440,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </li>
                     <li className="flex items-center gap-1.5 text-[#2AA894]">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
-                      <span>套餐全含4项增值服务（全额免费）</span>
+                      <span>含银行/税局/社保公积金开户及社保服务</span>
                     </li>
                   </ul>
                 </div>
@@ -526,7 +523,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     </li>
                     <li className="flex items-center gap-1.5 text-blue-700">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
-                      <span>套餐全含4项增值服务（全额免费）</span>
+                      <span>含银行/税局/社保公积金开户及社保服务</span>
                     </li>
                   </ul>
                 </div>
@@ -555,8 +552,9 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
             </div>
           </div>
 
-          {/* ==================== 03 服务项目与透明报价清单 ==================== */}
+          {/* ==================== 03 服务项目与自选增值服务清单 ==================== */}
           <div className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white">
+            {/* Header */}
             <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] flex items-center justify-center text-[#36B39E]">
@@ -564,7 +562,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 </div>
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-slate-800">
-                    <span className="text-[#2AA894] mr-1">03 ·</span>服务项目与透明报价清单
+                    <span className="text-[#2AA894] mr-1">03 ·</span>服务项目与自选增值服务清单
                   </h2>
                 </div>
               </div>
@@ -575,7 +573,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
             </div>
 
             {/* Current Selected Tier Info */}
-            <div className="mb-3.5 px-3.5 py-2.5 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
+            <div className="mb-4 px-3.5 py-2.5 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-slate-400">已选方案：</span>
                 <span className="font-bold text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200/70">
@@ -588,19 +586,18 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               <div className="text-xs text-[#2AA894]">
                 {selectedTier === 'standard'
                   ? '包含：执照正副本 + 公安备案防伪5章 + 市监规费减免'
-                  : '包含：企业注册全套 + 全年12个月记账托管'}
+                  : '包含：企业注册全套 + 全年代理记账 + 银行开户/税局开户/社保公积金等必选与默认服务'}
               </div>
             </div>
 
-            {/* Itemized List */}
-            <div className="divide-y divide-slate-100 text-xs">
+            {/* Single Unified Service List (套餐服务与自选服务不分区合并) */}
+            <div className="divide-y divide-slate-100 text-xs rounded-xl border border-slate-100 px-3 bg-white">
+              {/* 1. 套餐标配/必选服务项目（勾选不可变，前面都是绿色的勾子） */}
               {basePackageItems.map((item) => (
                 <div key={item.id} className="py-2.5 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${
-                      item.price === 0 ? 'bg-[#E6F7F2] text-[#2AA894]' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {item.price === 0 ? <Check className="w-3 h-3 stroke-[2.5]" /> : <FileBadge className="w-3 h-3" />}
+                    <div className="w-5 h-5 rounded-md bg-[#E6F7F2] text-[#2AA894] flex items-center justify-center shrink-0 select-none">
+                      <Check className="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
@@ -633,10 +630,63 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   </div>
                 </div>
               ))}
+
+              {/* 2. 企业注册服务内可选付费增值服务（前面是可选的 checkbox，点击可勾选/取消） */}
+              {selectedTier === 'standard' && OPTIONAL_ADDON_SERVICES.map((addon) => {
+                const isSelected = selectedAddons.includes(addon.id);
+
+                return (
+                  <div
+                    key={addon.id}
+                    onClick={() => handleToggleAddon(addon.id)}
+                    className="py-2.5 flex items-center justify-between gap-2 cursor-pointer hover:bg-slate-50/70 transition-colors select-none group"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {/* 可选的 checkbox */}
+                      <div
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all ${
+                          isSelected
+                            ? 'bg-[#36B39E] border border-[#36B39E] text-white'
+                            : 'border border-slate-300 bg-white group-hover:border-[#36B39E]'
+                        }`}
+                      >
+                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`font-medium ${isSelected ? 'text-slate-800' : 'text-slate-700'}`}>
+                            {addon.name}
+                          </span>
+                          <span
+                            className={`text-[10px] px-1.5 py-0.2 rounded border ${
+                              isSelected
+                                ? 'text-[#2AA894] bg-[#E6F7F2] border-[#36B39E]/30'
+                                : 'text-slate-500 bg-slate-100 border-slate-200'
+                            }`}
+                          >
+                            {isSelected ? '已加选' : '可选加购'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-0.5 truncate">{addon.desc}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <div className="flex items-baseline gap-1.5 justify-end">
+                        <span className={`font-bold ${isSelected ? 'text-slate-800' : 'text-slate-400'}`}>
+                          ¥{addon.price}
+                        </span>
+                        <span className="text-[11px] text-slate-400">/{addon.unit}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Cost Summary Box */}
-            <div className="mt-4 p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            {/* Combined Cost Summary Box */}
+            <div className="mt-5 p-4 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div className="space-y-1 text-xs text-slate-500">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span>项目原价：¥{formatMoney(activePlan.totalOriginal)}</span>
@@ -644,13 +694,21 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   <span className="text-[#2AA894] font-medium">
                     政策减免与套餐优惠：-¥{formatMoney(activePlan.totalDiscount)}
                   </span>
+                  {selectedTier === 'standard' && selectedAddons.length > 0 && (
+                    <>
+                      <span>·</span>
+                      <span className="text-slate-600 font-medium">
+                        加选增值服务（{selectedAddons.length}项）：+¥{formatMoney(activePlan.finalPrice - 600)}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <p className="text-slate-600">
                   {selectedTier === 'standard'
-                    ? '已选【企业注册服务】：政务代办、执照申领、公安防伪芯片5章及规费全免。'
+                    ? '已选【企业注册服务】：政务代办、执照申领、公安防伪芯片5章及规费全免' + (selectedAddons.length > 0 ? `，加选 ${selectedAddons.length} 项可选增值服务。` : '。')
                     : selectedTier === 'bundle_small'
-                    ? '已选【全年无忧（小规模）】：含企业注册全套及全年12个月小规模代理记账。'
-                    : '已选【全年无忧（一般纳税人）】：含企业注册全套及全年12个月一般人记账及专票抵扣。'}
+                    ? '已选【全年无忧（小规模）】：含企业注册全套、小规模代理记账，以及银行开户、税局开户、社保公积金开户与社保公积金服务。'
+                    : '已选【全年无忧（一般纳税人）】：含企业注册全套、一般纳税人专票记账，以及银行开户、税局开户、社保公积金开户与社保公积金服务。'}
                 </p>
               </div>
 
@@ -661,175 +719,6 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   <span>{formatMoney(activePlan.finalPrice)}</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* ==================== 04 自选增值服务（按需单列勾选） ==================== */}
-          <div className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] flex items-center justify-center text-[#36B39E]">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-800">
-                      <span className="text-[#2AA894] mr-1">04 ·</span>自选增值服务（按需勾选）
-                    </h2>
-                    <span className="text-[11px] font-medium text-[#2AA894] bg-[#E6F7F2] px-2 py-0.5 rounded-full">
-                      {selectedTier === 'standard' ? '统一透明标价 · 默认不勾选 · 按需加购' : '全年无忧套餐已全包 · 全部免费'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Notification Banner for Bundle */}
-            {selectedTier !== 'standard' && (
-              <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/70 flex items-center gap-2 text-xs text-emerald-800 mb-3.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>
-                  <strong>全年无忧全包优惠：</strong>当前套餐已默认全含以下全部自选服务（全额免费 ¥0）。
-                </span>
-              </div>
-            )}
-
-            {/* Single column list */}
-            <div className="space-y-2.5">
-              {OPTIONAL_ADDON_SERVICES.map((addon) => {
-                const isSelected = selectedAddons.includes(addon.id);
-                const isBundle = selectedTier !== 'standard';
-
-                return (
-                  <div
-                    key={addon.id}
-                    onClick={() => handleToggleAddon(addon.id)}
-                    className={`p-3.5 rounded-xl border transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 select-none ${
-                      isSelected
-                        ? isBundle 
-                          ? 'border-emerald-300 bg-emerald-50/30'
-                          : 'border-[#36B39E] bg-[#F8FCFB]'
-                        : 'border-slate-200/80 bg-white hover:border-slate-300'
-                    }`}
-                  >
-                    {/* Left: Checkbox + Info */}
-                    <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className={`mt-0.5 w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                        isSelected
-                          ? isBundle ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-[#36B39E] border-[#36B39E] text-white'
-                          : 'border-slate-300 bg-white'
-                      }`}>
-                        {isSelected && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                          <span className={`text-xs font-bold ${isSelected ? 'text-slate-800' : 'text-slate-700'}`}>
-                            {addon.name}
-                          </span>
-                          
-                          {isBundle ? (
-                            <span className={`text-[10px] px-1.5 py-0.2 rounded whitespace-nowrap border ${
-                              isSelected
-                                ? 'text-emerald-800 bg-emerald-50 border-emerald-200'
-                                : 'text-slate-400 bg-slate-100 border-slate-200'
-                            }`}>
-                              {isSelected ? '全包免费 ¥0' : '已关闭'}
-                            </span>
-                          ) : (
-                            <span className={`text-[10px] px-1.5 py-0.2 rounded whitespace-nowrap border ${
-                              isSelected 
-                                ? 'bg-[#36B39E] text-white border-[#36B39E]' 
-                                : 'bg-slate-100 text-slate-600 border-slate-200'
-                            }`}>
-                              ¥{addon.price}/{addon.unit}
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="text-xs text-slate-400 leading-relaxed">
-                          {addon.desc}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Right: Price & Toggle Switch */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pl-7 sm:pl-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
-                      <div className="text-right min-w-[75px]">
-                        {isBundle ? (
-                          <div className="flex sm:flex-col items-center sm:items-end gap-1 sm:gap-0">
-                            <span className="text-xs font-bold text-emerald-600 leading-tight">
-                              {isSelected ? '¥0 (免费)' : '不办理'}
-                            </span>
-                            <span className="text-[10px] text-slate-400 line-through leading-tight">
-                              原价¥{addon.price}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex sm:flex-col items-center sm:items-end gap-1 sm:gap-0">
-                            <span className="text-xs font-bold text-slate-800 leading-tight">
-                              ¥{addon.price}
-                            </span>
-                            <span className="text-[10px] text-slate-400 leading-tight">
-                              /{addon.unit}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div
-                        className={`w-9 h-5 rounded-full transition-colors relative flex items-center p-0.5 cursor-pointer shrink-0 ${
-                          isSelected ? (isBundle ? 'bg-emerald-600' : 'bg-[#36B39E]') : 'bg-slate-300'
-                        }`}
-                      >
-                        <div
-                          className={`w-4 h-4 rounded-full bg-white transition-transform transform duration-150 ${
-                            isSelected ? 'translate-x-4' : 'translate-x-0'
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Stable In-place summary for standard tier */}
-            {selectedTier === 'standard' && (
-              <div className="mt-3.5 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
-                <span className="text-slate-400">
-                  已加购自选服务：<strong className="text-[#2AA894] font-medium">{selectedAddons.length}</strong> 项
-                  {selectedAddons.length > 0 && `（小计：¥${formatMoney(activePlan.finalPrice - 600)}元）`}
-                </span>
-                <span className="text-slate-600">
-                  当前方案总计：<strong className="text-[#36B39E] text-sm font-bold">¥{formatMoney(activePlan.finalPrice)}</strong> 元
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* ==================== 05 交付清单与物料凭据 ==================== */}
-          <div className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white">
-            <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-slate-100">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-                <span>05 · 交付清单</span>
-              </div>
-              <span className="text-xs text-slate-400">办结成果交付物</span>
-            </div>
-
-            <h3 className="text-sm font-bold text-slate-800 mb-3">
-              签约完成后您将收到的全套实体与电子交付物
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              {activePlan.deliverables.map((item, idx) => (
-                <div key={idx} className="p-2.5 rounded-xl bg-slate-50/70 border border-slate-200/70 flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#36B39E] shrink-0" />
-                  <span className="font-medium">{item}</span>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -956,15 +845,15 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
       {/* Phone & SMS Verification Modal on Confirming Proposal */}
       {showPhoneModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] text-[#36B39E] flex items-center justify-center">
                   <Smartphone className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-800">确认方案 · 手机号验证</h3>
-                  <span className="text-[11px] text-slate-400">接收政务设立进度与实名核验通知</span>
+                  <h3 className="text-sm font-bold text-slate-800">手机号验证</h3>
+                  <span className="text-[11px] text-slate-400">用于接收办理进度与实名通知</span>
                 </div>
               </div>
               <button
@@ -976,13 +865,8 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               </button>
             </div>
 
-            <div className="space-y-3.5 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-200/70 text-slate-600 leading-relaxed">
-                <span className="font-bold text-[#2AA894]">方案确认提示：</span>
-                请输入手机号并输入验证码确认方案。该手机号将作为接收工商网申、实名认证通知与执照寄送的联系号码。
-              </div>
-
-              {/* Mobile field - NO NAME INPUT */}
+            <div className="space-y-4 text-xs">
+              {/* Mobile field */}
               <div>
                 <label className="font-medium text-slate-700 block mb-1">
                   手机号码 <span className="text-red-500">*</span>
@@ -1008,7 +892,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     maxLength={6}
                     value={smsCode}
                     onChange={(e) => setSmsCode(e.target.value.trim())}
-                    placeholder="输入验证码 (测试填 8866)"
+                    placeholder="请输入验证码"
                     className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
                   />
                   <button
@@ -1024,9 +908,6 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                     {countdown > 0 ? `${countdown}s 后重发` : '获取验证码'}
                   </button>
                 </div>
-                <span className="text-[11px] text-slate-400 mt-1 block">
-                  测试环境快捷提示：点击「获取验证码」可自动填入 8866
-                </span>
               </div>
 
               <div className="pt-2 flex items-center justify-end gap-2.5">
@@ -1043,7 +924,7 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                   onClick={handleConfirmAndProceed}
                   className="px-5 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  <span>确认方案并前往支付</span>
+                  <span>确认并前往支付</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
