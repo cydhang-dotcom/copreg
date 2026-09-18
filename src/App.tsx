@@ -78,7 +78,10 @@ export default function App() {
   };
 
   // Step 2: Confirm Proposal -> Go to Payment (Merged Agreement & Payment)
-  const handleProposalProceed = () => {
+  const handleProposalProceed = (phone?: string) => {
+    if (phone) {
+      setOrder(prev => ({ ...prev, contactPhone: phone }));
+    }
     unlockStep('payment');
     setCurrentStep('payment');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -229,6 +232,7 @@ export default function App() {
           <ProposalStep
             plan={plan}
             survey={survey}
+            contactPhone={order.contactPhone}
             onUpdatePlan={(newPlan) => {
               setPlan(newPlan);
               setOrder(prev => ({ ...prev, amount: newPlan.finalPrice }));

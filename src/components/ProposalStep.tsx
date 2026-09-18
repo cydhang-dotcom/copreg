@@ -24,13 +24,15 @@ import {
   Landmark,
   FileSpreadsheet,
   Users,
-  Sparkles
+  Sparkles,
+  Smartphone
 } from 'lucide-react';
 
 interface ProposalStepProps {
   plan: RegistrationPlan;
   survey: SurveyData;
-  onProceed: () => void;
+  contactPhone?: string;
+  onProceed: (phone?: string) => void;
   onBack: () => void;
   onUpdatePlan?: (newPlan: RegistrationPlan) => void;
 }
@@ -38,6 +40,7 @@ interface ProposalStepProps {
 export const ProposalStep: React.FC<ProposalStepProps> = ({
   plan,
   survey,
+  contactPhone,
   onProceed,
   onBack,
   onUpdatePlan
@@ -64,6 +67,12 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
   const [showReportModal, setShowReportModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Phone and SMS verification modal for confirming proposal
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
+  const [phone, setPhone] = useState(contactPhone || '13800138000');
+  const [smsCode, setSmsCode] = useState('');
+  const [countdown, setCountdown] = useState(0);
+
   const formatMoney = (val?: number | null) => {
     if (val === undefined || val === null || isNaN(val)) return '0';
     return val.toLocaleString();
@@ -72,6 +81,44 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2500);
+  };
+
+  const handleSendSms = () => {
+    if (!phone || phone.trim().length !== 11) {
+      showToast('请输入正确的11位手机号码');
+      return;
+    }
+    setCountdown(60);
+    setSmsCode('8866');
+    showToast('短信验证码已发送至您的手机：8866（已自动填入）');
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleConfirmAndProceed = () => {
+    if (!phone || phone.trim().length !== 11) {
+      showToast('请输入有效的11位手机号码');
+      return;
+    }
+    if (!smsCode || (smsCode !== '8866' && smsCode.length < 4)) {
+      showToast('请输入短信验证码（测试环境可填 8866）');
+      return;
+    }
+
+    setShowPhoneModal(false);
+    if (onUpdatePlan) {
+      onUpdatePlan(activePlan);
+    }
+    showToast('手机号验证通过，方案已确认！');
+    onProceed(phone);
   };
 
   // Handler to switch tier
@@ -816,14 +863,11 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
               type="button"
               id="btn-confirm-proposal-proceed"
               onClick={() => {
-                if (onUpdatePlan) {
-                  onUpdatePlan(activePlan);
-                }
-                onProceed();
+                setShowPhoneModal(true);
               }}
               className="px-6 py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <span>确认方案（¥ {formatMoney(activePlan.finalPrice)}）· 前往结算</span>
+              <span>确认方案（¥ {formatMoney(activePlan.finalPrice)}）</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -898,15 +942,111 @@ export const ProposalStep: React.FC<ProposalStepProps> = ({
                 type="button"
                 onClick={() => {
                   setShowReportModal(false);
-                  if (onUpdatePlan) {
-                    onUpdatePlan(activePlan);
-                  }
-                  onProceed();
+                  setShowPhoneModal(true);
                 }}
-                className="px-6 py-2 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white text-xs font-semibold shadow-xs cursor-pointer"
+                className="px-6 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-semibold shadow-xs cursor-pointer"
               >
-                确认并前往签约
+                确认方案
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Phone & SMS Verification Modal on Confirming Proposal */}
+      {showPhoneModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] text-[#36B39E] flex items-center justify-center">
+                  <Smartphone className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800">确认方案 · 手机号验证</h3>
+                  <span className="text-[11px] text-slate-400">接收政务设立进度与实名核验通知</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPhoneModal(false)}
+                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="space-y-3.5 text-xs">
+              <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-200/70 text-slate-600 leading-relaxed">
+                <span className="font-bold text-[#2AA894]">方案确认提示：</span>
+                请输入手机号并输入验证码确认方案。该手机号将作为接收工商网申、实名认证通知与执照寄送的联系号码。
+              </div>
+
+              {/* Mobile field - NO NAME INPUT */}
+              <div>
+                <label className="font-medium text-slate-700 block mb-1">
+                  手机号码 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  maxLength={11}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
+                  placeholder="请输入11位手机号码"
+                />
+              </div>
+
+              {/* SMS Code field */}
+              <div>
+                <label className="font-medium text-slate-700 block mb-1">
+                  短信验证码 <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    maxLength={6}
+                    value={smsCode}
+                    onChange={(e) => setSmsCode(e.target.value.trim())}
+                    placeholder="输入验证码 (测试填 8866)"
+                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
+                  />
+                  <button
+                    type="button"
+                    disabled={countdown > 0}
+                    onClick={handleSendSms}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-medium shrink-0 transition-colors cursor-pointer ${
+                      countdown > 0
+                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                        : 'bg-[#E6F7F2] text-[#2AA894] hover:bg-[#D1F2EB]'
+                    }`}
+                  >
+                    {countdown > 0 ? `${countdown}s 后重发` : '获取验证码'}
+                  </button>
+                </div>
+                <span className="text-[11px] text-slate-400 mt-1 block">
+                  测试环境快捷提示：点击「获取验证码」可自动填入 8866
+                </span>
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setShowPhoneModal(false)}
+                  className="px-4 py-2 rounded-full border border-slate-200 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  id="btn-confirm-phone-sms-submit"
+                  onClick={handleConfirmAndProceed}
+                  className="px-5 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <span>确认方案并前往支付</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

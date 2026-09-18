@@ -8,7 +8,6 @@ import { RegistrationPlan, PaymentOrder } from '../types';
 import { 
   FileText, 
   CheckCircle2, 
-  Smartphone, 
   ShieldCheck, 
   Lock, 
   CreditCard, 
@@ -72,14 +71,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
     order.paymentMethod === 'alipay' ? 'alipay' : 'wechat'
   );
 
-  // Modal 1: Phone & SMS verification
-  const [showSmsModal, setShowSmsModal] = useState(false);
-  const [contactName, setContactName] = useState(order.contactName || '林楚天');
-  const [phone, setPhone] = useState(order.contactPhone || '13800138000');
-  const [smsCode, setSmsCode] = useState('');
-  const [countdown, setCountdown] = useState(0);
-
-  // Modal 2: Cashier modal
+  // Cashier modal (直接支付)
   const [showPayModal, setShowPayModal] = useState(false);
   const [isProcessingPay, setIsProcessingPay] = useState(false);
 
@@ -90,50 +82,13 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Triggered when user clicks "立即支付"
+  // Triggered when user clicks "立即支付" - 只进行支付
   const handleStartPayment = () => {
     if (!hasAgreed) {
       showToast('请先勾选同意《委托代理服务协议》');
       return;
     }
-    // Open SMS verification modal as required
-    setShowSmsModal(true);
-  };
-
-  // Send SMS verification code
-  const handleSendSms = () => {
-    if (!phone || phone.length < 11) {
-      showToast('请输入正确的11位手机号');
-      return;
-    }
-    setCountdown(60);
-    setSmsCode('8866');
-    showToast('短信验证码已发送至您的手机：8866（已自动填入）');
-
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  // Submit SMS verification -> Open Payment Cashier
-  const handleConfirmSmsAndProceedToPay = () => {
-    if (!phone || phone.length < 11) {
-      showToast('请输入有效手机号');
-      return;
-    }
-    if (!smsCode || (smsCode !== '8866' && smsCode.length < 4)) {
-      showToast('请输入正确的验证码（测试验证码：8866）');
-      return;
-    }
-
-    // Verification passed, close SMS modal and open cashier modal
-    setShowSmsModal(false);
+    // “立即支付”只支付：直接唤起支付收银台
     setShowPayModal(true);
   };
 
@@ -150,8 +105,6 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
         status: 'paid',
         paidAt: now,
         paymentMethod: payMethod,
-        contactName,
-        contactPhone: phone,
         amount: plan.finalPrice
       };
 
@@ -682,109 +635,8 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* ==================== MODAL 1: SMS VERIFICATION MODAL ==================== */}
-      {/* ========================================================================= */}
-      {showSmsModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] text-[#36B39E] flex items-center justify-center">
-                  <Smartphone className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-800">经办人手机号安全核验</h3>
-                  <span className="text-[11px] text-slate-400">核验签署人身份以完成协议确认</span>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowSmsModal(false)}
-                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="space-y-3.5 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-200/70 text-slate-600">
-                <span className="font-bold text-[#2AA894]">协议确认：</span>
-                您即将以经办人身份签署《委托代理服务协议》，请通过手机验证码完成签署。
-              </div>
-
-              {/* Name field */}
-              <div>
-                <label className="font-medium text-slate-700 block mb-1">经办人姓名</label>
-                <input
-                  type="text"
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
-                  placeholder="请输入经办人姓名"
-                />
-              </div>
-
-              {/* Mobile field */}
-              <div>
-                <label className="font-medium text-slate-700 block mb-1">经办人手机号</label>
-                <input
-                  type="tel"
-                  maxLength={11}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
-                  placeholder="请输入11位手机号码"
-                />
-              </div>
-
-              {/* SMS Code field */}
-              <div>
-                <label className="font-medium text-slate-700 block mb-1">短信验证码</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    value={smsCode}
-                    onChange={(e) => setSmsCode(e.target.value)}
-                    placeholder="输入验证码 (测试填 8866)"
-                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#36B39E]"
-                  />
-                  <button
-                    type="button"
-                    disabled={countdown > 0}
-                    onClick={handleSendSms}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium shrink-0 transition-colors cursor-pointer ${
-                      countdown > 0
-                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : 'bg-[#E6F7F2] text-[#2AA894] hover:bg-[#D1F2EB]'
-                    }`}
-                  >
-                    {countdown > 0 ? `${countdown}s 后重发` : '获取验证码'}
-                  </button>
-                </div>
-                <span className="text-[11px] text-slate-400 mt-1 block">
-                  测试环境快捷提示：点击「获取验证码」可自动填入 8866
-                </span>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={handleConfirmSmsAndProceedToPay}
-                  className="w-full py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-                >
-                  <span>核验通过，前往支付（¥{formatMoney(finalPrice)}）</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ===================================================================== */}
-      {/* ==================== MODAL 2: CASHIER / PAY MODAL =================== */}
+      {/* ==================== MODAL: CASHIER / PAY MODAL ===================== */}
       {/* ===================================================================== */}
       {showPayModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
