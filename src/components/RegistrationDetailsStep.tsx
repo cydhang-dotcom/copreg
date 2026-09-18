@@ -142,88 +142,88 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
 
           {/* Top Step Heading - states current step clearly */}
-          <section className="mb-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
+          <section className="mb-5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] mb-2 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
               <span>企业注册资料填报</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
-              <span className="text-[#2AA894]">第 4 步：</span>填写企业注册登记信息与上传申报资料
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
+              <span className="text-[#2AA894]">第 4 步：</span><span className="text-[#1D6C5E]">填写企业注册登记信息与上传申报资料</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl leading-relaxed">
-              请录入企业申报名称、主要人员与注册资本架构，并上传身份证明等申办所需文件。提交后政务专员将为您启动核验与政务申报。
+            <p className="text-xs text-slate-500 max-w-2xl leading-relaxed">
+              请录入申报名称、主要人员与股权架构并上传证件原件，提交后专员将为您启动核验与政务申报。
             </p>
           </section>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             
             {/* ==================== 01 企业字号自主申报 ==================== */}
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
+            <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
+              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
                   <span>01 · 字号申报</span>
                 </div>
-                <span className="text-xs font-semibold text-[#2AA894] bg-[#E6F7F2] px-3 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs font-medium text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>市监核名预估通过率：96%</span>
                 </span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-3.5">
                 企业自主申报名称与备选字号
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1.5">
+                  <label className="text-xs font-medium text-slate-700 block mb-1">
                     主选公司全称 <span className="text-red-500">*</span>
-                    <span className="text-slate-400 font-normal ml-2">格式：行政区划 + 字号 + 行业特征 + 组织形式</span>
+                    <span className="text-slate-400 font-normal ml-1.5">（行政区划 + 字号 + 行业特征 + 组织形式）</span>
                   </label>
                   <input
                     type="text"
                     value={details.primaryName}
                     onChange={(e) => onUpdateDetails({ ...details, primaryName: e.target.value })}
-                    className="w-full p-3 rounded-2xl border border-slate-200 outline-none focus:border-[#48BFA2] font-bold text-[#0F172A] text-sm bg-white"
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 outline-none focus:border-[#36B39E] bg-white"
                     placeholder="如：云帆盛景出海跨境科技（深圳）有限公司"
                   />
                 </div>
 
                 {/* Real-time Name Diagnostic Check Box */}
-                <div className="p-4 rounded-2xl bg-[#F4FCFA] border border-[#D1F2EB] flex flex-wrap items-center justify-between gap-3 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] font-medium">
+                <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-200/70 flex flex-wrap items-center justify-between gap-2.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] text-[11px]">
                       ✓ 行政区划：深圳
                     </span>
-                    <span className="px-2.5 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] font-medium">
-                      ✓ 核心字号：云帆盛景（无驰名冲突）
+                    <span className="px-2 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] text-[11px]">
+                      ✓ 核心字号：云帆盛景
                     </span>
-                    <span className="px-2.5 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] font-medium">
-                      ✓ 行业表述符合国民经济行业分类
+                    <span className="px-2 py-0.5 rounded bg-white text-[#2AA894] border border-[#D1F2EB] text-[11px]">
+                      ✓ 行业表述符合规范
                     </span>
                   </div>
-                  <span className="text-[#2AA894] font-semibold">符合自主申报规则</span>
+                  <span className="text-[#2AA894] text-[11px] font-medium">符合自主申报规则</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1.5">备选用名 1（主选重名时代为提交）</label>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">备选用名 1（重名时替补）</label>
                     <input
                       type="text"
                       value={details.backupName1}
                       onChange={(e) => onUpdateDetails({ ...details, backupName1: e.target.value })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2] text-xs bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E] text-xs bg-white"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1.5">备选用名 2</label>
+                    <label className="text-xs font-medium text-slate-700 block mb-1">备选用名 2</label>
                     <input
                       type="text"
                       value={details.backupName2}
                       onChange={(e) => onUpdateDetails({ ...details, backupName2: e.target.value })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2] text-xs bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E] text-xs bg-white"
                     />
                   </div>
                 </div>
@@ -231,26 +231,26 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
             </div>
 
             {/* ==================== 02 法定代表人与董监高 ==================== */}
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
+            <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
+              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
                   <span>02 · 董监高架构</span>
                 </div>
                 <span className="text-xs text-slate-400">依据新《公司法》规范法定职责</span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-3.5">
                 法定代表人、监事与财务负责人
               </h2>
 
               {/* Legal Representative */}
-              <div className="mb-5">
-                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+              <div className="mb-4">
+                <h3 className="text-xs font-medium text-slate-700 mb-2 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-[#36B39E]" />
-                  <span>法定代表人（执行公司事务负责人）</span>
+                  <span>法定代表人（执行事务负责人）</span>
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
                   <div>
                     <label className="text-slate-500 block mb-1">姓名 <span className="text-red-500">*</span></label>
                     <input
@@ -260,7 +260,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                         ...details,
                         legalRepresentative: { ...details.legalRepresentative, name: e.target.value }
                       })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2] font-semibold"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E]"
                     />
                   </div>
                   <div>
@@ -272,7 +272,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                         ...details,
                         legalRepresentative: { ...details.legalRepresentative, idCard: e.target.value }
                       })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2] font-mono"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E] font-mono"
                     />
                   </div>
                   <div>
@@ -284,7 +284,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                         ...details,
                         legalRepresentative: { ...details.legalRepresentative, phone: e.target.value }
                       })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2] font-mono"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E] font-mono"
                     />
                   </div>
                   <div>
@@ -296,16 +296,16 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                         ...details,
                         legalRepresentative: { ...details.legalRepresentative, email: e.target.value }
                       })}
-                      className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2]"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E]"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Supervisor & Finance Officer */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                  <span className="text-xs font-bold text-slate-800 block mb-2">监事人员信息（不可与法人为同一人）</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-slate-100">
+                <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200/70">
+                  <span className="text-xs font-medium text-slate-800 block mb-2">监事人员（不可与法人为同一人）</span>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <label className="text-slate-500 block mb-1">监事姓名</label>
@@ -316,11 +316,11 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                           ...details,
                           supervisor: { ...details.supervisor, name: e.target.value }
                         })}
-                        className="w-full p-2 rounded-xl border border-slate-200 bg-white"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white"
                       />
                     </div>
                     <div>
-                      <label className="text-slate-500 block mb-1">监事身份证号</label>
+                      <label className="text-slate-500 block mb-1">身份证号</label>
                       <input
                         type="text"
                         value={details.supervisor.idCard}
@@ -328,17 +328,17 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                           ...details,
                           supervisor: { ...details.supervisor, idCard: e.target.value }
                         })}
-                        className="w-full p-2 rounded-xl border border-slate-200 bg-white font-mono"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-mono"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                  <span className="text-xs font-bold text-slate-800 block mb-2">财务负责人信息（电子税局实名绑定）</span>
+                <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200/70">
+                  <span className="text-xs font-medium text-slate-800 block mb-2">财务负责人（电子税局绑定）</span>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <label className="text-slate-500 block mb-1">财务负责人姓名</label>
+                      <label className="text-slate-500 block mb-1">负责人姓名</label>
                       <input
                         type="text"
                         value={details.financeOfficer.name}
@@ -346,11 +346,11 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                           ...details,
                           financeOfficer: { ...details.financeOfficer, name: e.target.value }
                         })}
-                        className="w-full p-2 rounded-xl border border-slate-200 bg-white"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white"
                       />
                     </div>
                     <div>
-                      <label className="text-slate-500 block mb-1">财务负责人身份证号</label>
+                      <label className="text-slate-500 block mb-1">身份证号</label>
                       <input
                         type="text"
                         value={details.financeOfficer.idCard}
@@ -358,7 +358,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                           ...details,
                           financeOfficer: { ...details.financeOfficer, idCard: e.target.value }
                         })}
-                        className="w-full p-2 rounded-xl border border-slate-200 bg-white font-mono"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-mono"
                       />
                     </div>
                   </div>
@@ -367,14 +367,14 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
             </div>
 
             {/* ==================== 03 股东构成与出资比例 ==================== */}
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
+            <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
+              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
                   <span>03 · 股权架构</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                  <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                     totalRatio === 100 
                       ? 'bg-[#E6F7F2] text-[#2AA894]' 
                       : 'bg-red-50 text-red-600'
@@ -384,7 +384,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                   <button
                     type="button"
                     onClick={handleAddShareholder}
-                    className="px-3 py-1 rounded-full border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-1 cursor-pointer"
+                    className="px-2.5 py-0.5 rounded-full border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>添加股东</span>
@@ -392,15 +392,15 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                 </div>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-3.5">
                 股东构成与持股出资比例
               </h2>
 
               {/* Visual Equity Bar */}
-              <div className="mb-5">
-                <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex">
+              <div className="mb-4">
+                <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden flex">
                   {details.shareholders.map((sh, idx) => {
-                    const colors = ['bg-[#48BFA2]', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500'];
+                    const colors = ['bg-[#36B39E]', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500'];
                     return (
                       <div
                         key={sh.id}
@@ -413,7 +413,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                 </div>
                 <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-500">
                   {details.shareholders.map((sh, idx) => {
-                    const dots = ['bg-[#48BFA2]', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500'];
+                    const dots = ['bg-[#36B39E]', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500'];
                     return (
                       <span key={sh.id} className="flex items-center gap-1">
                         <span className={`w-2 h-2 rounded-full ${dots[idx % dots.length]}`}></span>
@@ -425,9 +425,9 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
               </div>
 
               {/* Shareholder List */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {details.shareholders.map((sh) => (
-                  <div key={sh.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div key={sh.id} className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200/70 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 flex-1">
                       <div>
                         <span className="text-slate-400 block mb-0.5">股东姓名</span>
@@ -438,7 +438,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                             const updated = details.shareholders.map((s) => s.id === sh.id ? { ...s, name: e.target.value } : s);
                             onUpdateDetails({ ...details, shareholders: updated });
                           }}
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-white font-semibold"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white"
                         />
                       </div>
                       <div>
@@ -450,7 +450,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                             const updated = details.shareholders.map((s) => s.id === sh.id ? { ...s, idCard: e.target.value } : s);
                             onUpdateDetails({ ...details, shareholders: updated });
                           }}
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-white font-mono"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white font-mono"
                         />
                       </div>
                       <div>
@@ -461,7 +461,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                           max="100"
                           value={sh.ratio}
                           onChange={(e) => handleShareholderRatioChange(sh.id, Number(e.target.value))}
-                          className="w-full p-2 rounded-xl border border-slate-200 bg-white font-bold text-[#2AA894]"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white font-medium text-[#2AA894]"
                         />
                       </div>
                     </div>
@@ -469,7 +469,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                     <button
                       type="button"
                       onClick={() => handleRemoveShareholder(sh.id)}
-                      className="p-2 text-slate-400 hover:text-red-500 transition-colors self-end sm:self-center cursor-pointer"
+                      className="p-1.5 text-slate-400 hover:text-red-500 transition-colors self-end sm:self-center cursor-pointer"
                       title="删除股东"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -480,24 +480,24 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
             </div>
 
             {/* ==================== 04 注册地址与经营场所 ==================== */}
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
+            <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
+              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
                   <span>04 · 场地信息</span>
                 </div>
-                <span className="text-xs text-[#2AA894] bg-[#E6F7F2] px-3 py-1 rounded-full font-semibold">
+                <span className="text-xs text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full font-medium">
                   已核验产权编码
                 </span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-3.5">
                 企业法定注册地址与经营场地
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="sm:col-span-2">
-                  <label className="text-slate-500 block mb-1">地址全称（需与房产证明/租赁凭证完全一致）</label>
+                  <label className="text-slate-500 block mb-1">地址全称（需与房产证明或租赁凭证一致）</label>
                   <input
                     type="text"
                     value={details.officeAddress.region}
@@ -505,7 +505,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                       ...details,
                       officeAddress: { ...details.officeAddress, region: e.target.value }
                     })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E]"
                   />
                 </div>
                 <div>
@@ -517,7 +517,7 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                       ...details,
                       officeAddress: { ...details.officeAddress, detail: e.target.value }
                     })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E]"
                   />
                 </div>
                 <div>
@@ -529,16 +529,16 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                       ...details,
                       officeAddress: { ...details.officeAddress, propertyType: e.target.value }
                     })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:border-[#48BFA2]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-[#36B39E]"
                   />
                 </div>
               </div>
             </div>
 
             {/* ==================== 05 申办资料扫描件上传 ==================== */}
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-200 bg-white shadow-xs">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] select-none">
+            <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white">
+              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
                   <span>05 · 资料归集</span>
                 </div>
@@ -546,44 +546,44 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                   <button
                     type="button"
                     onClick={handleUploadAllMock}
-                    className="text-xs font-semibold px-3 py-1 rounded-full bg-[#E6F7F2] text-[#2AA894] transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#E6F7F2] text-[#2AA894] transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <Paperclip className="w-3.5 h-3.5" />
                     <span>一键齐备资料示例</span>
                   </button>
-                  <span className="text-xs text-slate-400">支持 PDF、JPG、PNG 格式</span>
+                  <span className="text-xs text-slate-400">支持 PDF、JPG、PNG</span>
                 </div>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-3.5">
                 申办资料电子原件上传
               </h2>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {details.docs.map((doc) => (
                   <div
                     key={doc.id}
-                    className="p-4 rounded-2xl border border-slate-200 hover:border-[#48BFA2] transition-all bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    className="p-3.5 rounded-xl border border-slate-200/80 hover:border-[#36B39E] transition-colors bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-2xl bg-[#E6F7F2] text-[#2AA894] flex items-center justify-center shrink-0">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-[#E6F7F2] text-[#2AA894] flex items-center justify-center shrink-0">
                         <FileText className="w-4 h-4" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs sm:text-sm font-bold text-[#0F172A]">{doc.name}</span>
+                          <span className="text-xs sm:text-sm font-medium text-slate-800">{doc.name}</span>
                           {doc.required && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800">
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-50 text-amber-800 border border-amber-200/60">
                               必交
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                        <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-400">
                           <span>{doc.type}</span>
                           {doc.fileName && (
                             <>
                               <span>•</span>
-                              <span className="text-[#2AA894] font-mono font-medium">{doc.fileName}</span>
+                              <span className="text-[#2AA894] font-mono">{doc.fileName}</span>
                               <span>({doc.fileSize})</span>
                             </>
                           )}
@@ -594,14 +594,14 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                     <div className="flex items-center gap-2 self-end sm:self-center">
                       {doc.status === 'uploaded' ? (
                         <div className="flex items-center gap-2">
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#2AA894] bg-[#E6F7F2] px-3 py-1 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>已上传</span>
                           </span>
                           <button
                             type="button"
                             onClick={() => handleUploadMock(doc.id)}
-                            className="text-xs text-slate-400 underline hover:text-slate-700 cursor-pointer"
+                            className="text-xs text-slate-400 underline hover:text-slate-600 cursor-pointer"
                           >
                             重新上传
                           </button>
@@ -610,10 +610,10 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
                         <button
                           type="button"
                           onClick={() => handleUploadMock(doc.id)}
-                          className="px-4 py-2 rounded-full bg-white border border-slate-200 hover:border-[#48BFA2] hover:bg-[#F4FCFA] hover:text-[#2AA894] text-xs font-medium text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          className="px-3.5 py-1.5 rounded-full bg-white border border-slate-200 hover:border-[#36B39E] hover:bg-[#F4FCFA] hover:text-[#2AA894] text-xs font-medium text-slate-600 transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
                           <UploadCloud className="w-3.5 h-3.5 text-[#36B39E]" />
-                          <span>点击上传文件</span>
+                          <span>点击上传</span>
                         </button>
                       )}
                     </div>
@@ -628,14 +628,14 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
       </div>
 
       {/* Floating Bottom Bar */}
-      <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-100 py-3.5 px-6 shadow-md">
+      <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 py-3 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
           <button
             type="button"
             onClick={onBackToGroup}
-            className="px-6 py-2.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5" />
             <span>返回服务群</span>
           </button>
 
@@ -643,10 +643,10 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
             <button
               type="button"
               onClick={handleFinalSubmit}
-              className="px-7 py-2.5 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white text-sm font-medium shadow-xs transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+              className="px-6 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <span>提交并提醒客服核验</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

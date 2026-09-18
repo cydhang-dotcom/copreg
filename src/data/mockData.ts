@@ -404,7 +404,6 @@ export function generatePlanFromSurvey(
       isFree: isBundle,
       tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥200/次'
     });
-    deliverables.push('合作银行对公账户预约开户绿色通道通知单');
   }
 
   if (activeAddons.includes('addon-tax')) {
@@ -417,7 +416,6 @@ export function generatePlanFromSurvey(
       isFree: isBundle,
       tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥300/次'
     });
-    deliverables.push('电子税务局开户与首月财税合规辅导凭据');
   }
 
   if (activeAddons.includes('addon-social')) {
@@ -430,7 +428,6 @@ export function generatePlanFromSurvey(
       isFree: isBundle,
       tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥200/次'
     });
-    deliverables.push('企业社保专户与住房公积金单位专户设立凭单');
   }
 
   if (activeAddons.includes('addon-custody')) {
@@ -443,7 +440,6 @@ export function generatePlanFromSurvey(
       isFree: isBundle,
       tag: isBundle ? '套餐全包 · ¥0 (免费)' : '自选增值 ¥1,000/年'
     });
-    deliverables.push('社保公积金账号年度托管服务凭据（不含增减员及代缴）');
   }
 
   const totalOriginal = items.reduce((sum, it) => sum + it.originalPrice, 0);

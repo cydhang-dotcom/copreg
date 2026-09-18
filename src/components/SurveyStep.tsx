@@ -179,80 +179,67 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-4 relative z-10">
           
           {/* ==================== Top Step Heading & Tips ==================== */}
-          <section className="mb-6">
-            {/* Step Tag Pill */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-2.5 select-none">
+          <section className="mb-5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] mb-2 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
               <span>第 1 步 · 需求评估</span>
             </div>
 
-            {/* Display Heading - states current step clearly with brand color accent */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-3">
-              <span className="text-[#2AA894]">第 1 步：</span>填写企业开办基本信息与需求评估
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
+              <span className="text-[#2AA894]">第 1 步：</span><span className="text-[#1D6C5E]">填写企业开办基本信息与需求评估</span>
             </h1>
 
-            {/* Tips Card / Banner */}
-            <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-200/90 flex items-start gap-3 text-xs sm:text-[13px] text-amber-950 leading-relaxed shadow-2xs">
-              <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
-                <Info className="w-4 h-4 stroke-[2.5]" />
-              </div>
-              <div className="space-y-0.5">
-                <div className="font-bold text-amber-900 text-xs sm:text-[13px]">
-                  填写须知与操作提示 (Tips)
-                </div>
-                <p className="text-amber-800 text-xs sm:text-[13px] leading-relaxed">
-                  用于工商注册、税务开票、用工社保与股权架构方案评估。带 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-xs font-bold mx-0.5 border border-amber-300">必填</span> 的项建议完整提供；经营范围与许可资质可点击「AI 智能填充」生成科目，敏感要素为固定选项，AI 会自动勾选匹配项。
-                </p>
-              </div>
+            {/* Flat Tips Bar */}
+            <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200/70 flex items-center gap-2.5 text-xs text-amber-900 leading-relaxed">
+              <Info className="w-4 h-4 text-amber-700 shrink-0" />
+              <span>
+                用于评估组织形式与税务开票方案。带 <span className="text-amber-800 font-semibold">必填</span> 项建议完整提供，经营范围可使用 AI 智能生成。
+              </span>
             </div>
           </section>
 
-          {/* ==================== 01 核心需求 (Exact matching image.png) ==================== */}
+          {/* ==================== 01 核心需求 ==================== */}
           <div 
             id="sec-core"
-            className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs transition-all"
+            className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white transition-all"
           >
-            {/* Card Top Pill */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>01 · 核心需求</span>
+            <div className="flex items-center justify-between mb-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
+                <span>01 · 核心诉求</span>
+              </div>
+              <span className="text-xs text-slate-400">据此配置银行开户与财税方案</span>
             </div>
 
-            {/* Card Title */}
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-2">
+            <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-4">
               您开设企业最核心的诉求是什么？
             </h2>
 
-            {/* Card Subtitle */}
-            <p className="text-sm text-[#64748B] mb-6">
-              可选。我们将据此判断主体类型、银行开户与税务配套方案。
-            </p>
-
             {/* 2x2 Grid of 4 Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 {
                   title: '需公司主体',
                   sub: '营业执照 / 公章',
-                  icon: <Home className="w-5 h-5 stroke-[1.8]" />,
+                  icon: <Home className="w-4 h-4 stroke-[1.8]" />,
                   value: '需公司主体'
                 },
                 {
                   title: '需对公收款',
                   sub: '开立并使用对公账户',
-                  icon: <CreditCard className="w-5 h-5 stroke-[1.8]" />,
+                  icon: <CreditCard className="w-4 h-4 stroke-[1.8]" />,
                   value: '需对公收款'
                 },
                 {
                   title: '需开票',
                   sub: '增值税普通发票 / 专用发票',
-                  icon: <FileText className="w-5 h-5 stroke-[1.8]" />,
+                  icon: <FileText className="w-4 h-4 stroke-[1.8]" />,
                   value: '需开票'
                 },
                 {
                   title: '需用工并缴社保',
                   sub: '劳动合同 / 社保公积金',
-                  icon: <Users className="w-5 h-5 stroke-[1.8]" />,
+                  icon: <Users className="w-4 h-4 stroke-[1.8]" />,
                   value: '需用工并缴社保'
                 }
               ].map((opt) => {
@@ -261,33 +248,33 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                   <div
                     key={opt.value}
                     onClick={() => toggleCoreNeed(opt.value)}
-                    className={`flex items-center justify-between p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-center justify-between p-3.5 sm:p-4 rounded-xl border transition-colors cursor-pointer select-none ${
                       checked
-                        ? 'border-[#48BFA2] bg-[#F4FCFA] shadow-xs'
-                        : 'border-slate-200 bg-white hover:border-slate-300'
+                        ? 'border-[#36B39E] bg-[#F8FCFB]'
+                        : 'border-slate-200/80 bg-white hover:border-slate-300'
                     }`}
                   >
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-12 h-12 rounded-2xl bg-[#E6F7F2] flex items-center justify-center text-[#36B39E] shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-[#E6F7F2] flex items-center justify-center text-[#2AA894] shrink-0">
                         {opt.icon}
                       </div>
                       <div>
-                        <div className="text-base font-bold text-[#0F172A] leading-snug">
+                        <div className="text-sm font-bold text-slate-800 leading-snug">
                           {opt.title}
                         </div>
-                        <div className="text-xs text-[#94A3B8] mt-0.5">
+                        <div className="text-[11px] text-slate-400 mt-0.5">
                           {opt.sub}
                         </div>
                       </div>
                     </div>
 
                     {/* Radio / Check Circle */}
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
                       checked
-                        ? 'bg-[#48BFA2] border-[#48BFA2] text-white'
-                        : 'border-slate-200 bg-white'
+                        ? 'bg-[#36B39E] border-[#36B39E] text-white'
+                        : 'border-slate-300 bg-white'
                     }`}>
-                      {checked && <Check className="w-3 h-3 stroke-[3]" />}
+                      {checked && <Check className="w-2.5 h-2.5 stroke-[3]" />}
                     </div>
                   </div>
                 );
@@ -298,69 +285,68 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
           {/* ==================== 02 企业与业务 ==================== */}
           <div 
             id="sec-biz"
-            className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs transition-all"
+            className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white transition-all"
           >
-            {/* Card Pill */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>02 · 企业与业务</span>
+            <div className="flex items-center justify-between mb-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
+                <span>02 · 企业与业务</span>
+              </div>
+              <span className="text-xs text-slate-400">用于生成经营范围与合规建议</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-2">
+            <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-4">
               请描述拟设立企业的情况
             </h2>
-            <p className="text-sm text-[#64748B] mb-6">
-              描述越具体，AI 生成的经营范围与合规提示就越准确。
-            </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div>
-                <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0F172A] mb-1.5">
-                  企业描述 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必填</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1">
+                  企业描述 <span className="text-amber-600 text-[10px] font-semibold">必填</span>
                 </label>
                 <textarea
                   value={survey.companyDesc}
                   onChange={(e) => onChange({ ...survey, companyDesc: e.target.value })}
                   rows={2}
-                  placeholder="例如：拟设立一家有限责任公司，主营跨境电商，团队 5 人，计划面向欧美市场。"
-                  className="w-full text-xs sm:text-sm p-3 rounded-xl border border-slate-200 focus:border-[#48BFA2] focus:ring-2 focus:ring-[#48BFA2]/15 outline-none transition-all resize-y text-[#0F172A]"
+                  placeholder="例如：拟设立有限责任公司，主营跨境电商，计划面向欧美市场。"
+                  className="w-full text-xs sm:text-sm p-2.5 rounded-xl border border-slate-200/80 focus:border-[#36B39E] outline-none transition-colors resize-y text-slate-800"
                 />
               </div>
 
               <div>
-                <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0F172A] mb-1.5">
-                  业务描述 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必填</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1">
+                  业务描述 <span className="text-amber-600 text-[10px] font-semibold">必填</span>
                 </label>
                 <textarea
                   value={survey.bizDesc}
                   onChange={(e) => onChange({ ...survey, bizDesc: e.target.value })}
                   rows={2}
-                  placeholder="例如：从国内供应商采购商品，通过自建独立站销售给海外消费者，并提供售后客服。"
-                  className="w-full text-xs sm:text-sm p-3 rounded-xl border border-slate-200 focus:border-[#48BFA2] focus:ring-2 focus:ring-[#48BFA2]/15 outline-none transition-all resize-y text-[#0F172A]"
+                  placeholder="例如：国内采购商品，通过独立站销售给海外消费者并提供售后服务。"
+                  className="w-full text-xs sm:text-sm p-2.5 rounded-xl border border-slate-200/80 focus:border-[#36B39E] outline-none transition-colors resize-y text-slate-800"
                 />
               </div>
             </div>
 
             {/* AI Suggestion Box */}
-            <div className="mt-6 pt-5 border-t border-slate-100">
-              <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all ${
-                aiGenerated ? 'bg-slate-50 border-slate-200' : 'bg-[#F4FCFA] border-[#D1F2EB]'
+            <div className="mt-5 pt-4 border-t border-slate-100">
+              <div className={`p-3.5 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors ${
+                aiGenerated ? 'bg-slate-50/70 border-slate-200/80' : 'bg-[#F8FCFB] border-[#CDEFE7]'
               }`}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-[#D1F2EB] flex items-center justify-center text-[#36B39E] shadow-xs shrink-0">
-                    <Sparkles className="w-5 h-5 text-[#36B39E]" />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/70 flex items-center justify-center text-[#2AA894] shrink-0">
+                    <Sparkles className="w-4 h-4 text-[#2AA894]" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[#0F172A]">AI 智能分析与科目建议</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                        aiGenerated ? 'bg-[#E6F7F2] text-[#2AA894]' : 'bg-slate-200 text-slate-600'
+                      <span className="text-xs sm:text-sm font-bold text-slate-800">AI 智能提取科目</span>
+                      <span className={`text-[10px] px-2 py-0.2 rounded-full font-medium ${
+                        aiGenerated ? 'bg-[#E6F7F2] text-[#2AA894]' : 'bg-slate-200/70 text-slate-600'
                       }`}>
-                        {aiGenerated ? '已生成建议' : '待生成'}
+                        {aiGenerated ? '已生成' : '待生成'}
                       </span>
                     </div>
-                    <p className="text-xs text-[#64748B] mt-0.5">
-                      智能提取工商经营范围、许可审批资质，并自动勾选涉及的行业敏感要素
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      智能生成工商经营范围、许可资质与敏感要素
                     </p>
                   </div>
                 </div>
@@ -369,34 +355,34 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                   type="button"
                   disabled={isAiLoading}
                   onClick={handleAiGenerate}
-                  className="w-full sm:w-auto px-5 py-2 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white font-medium text-xs shadow-xs transition-colors active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  className="w-full sm:w-auto px-4 py-1.5 rounded-lg bg-[#36B39E] hover:bg-[#2AA894] text-white font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin' : ''}`} />
-                  <span>{isAiLoading ? 'AI 分析中…' : aiGenerated ? '重新分析并填充' : 'AI 智能填充'}</span>
+                  <span>{isAiLoading ? '分析中…' : aiGenerated ? '重新生成' : 'AI 智能填充'}</span>
                 </button>
               </div>
 
               {/* Scope Tags */}
-              <div className="mt-4">
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-1.5">
-                  初步经营范围 <span className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">AI 建议 / 可自定义</span>
+              <div className="mt-3.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1">
+                  初步经营范围 <span className="text-slate-400 text-[10px] font-normal">支持添加或删除</span>
                 </label>
-                <div className="min-h-[50px] p-2.5 border border-slate-200 rounded-xl bg-white flex flex-wrap items-center gap-1.5 focus-within:border-[#48BFA2] focus-within:ring-2 focus-within:ring-[#48BFA2]/15 transition-all">
+                <div className="min-h-[42px] p-2 border border-slate-200/80 rounded-xl bg-white flex flex-wrap items-center gap-1.5 focus-within:border-[#36B39E] transition-colors">
                   {survey.scope.length === 0 ? (
                     <span className="text-xs text-slate-400 pl-1">
-                      点击上方「AI 智能填充」或直接在右侧输入后回车添加
+                      点击上方「AI 智能填充」或在右侧输入后回车添加
                     </span>
                   ) : (
                     survey.scope.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894]"
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#E6F7F2] text-[#2AA894]"
                       >
                         <span>{tag}</span>
                         <button
                           type="button"
                           onClick={() => removeScopeTag(tag)}
-                          className="w-3.5 h-3.5 rounded-full hover:bg-slate-200 hover:text-red-500 flex items-center justify-center transition-colors"
+                          className="w-3.5 h-3.5 rounded hover:text-red-500 flex items-center justify-center transition-colors"
                         >
                           <X className="w-2.5 h-2.5" />
                         </button>
@@ -405,7 +391,7 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                   )}
                   <input
                     type="text"
-                    placeholder="+ 输入科目后回车添加"
+                    placeholder="+ 回车添加科目"
                     value={aiTagInputScope}
                     onChange={(e) => setAiTagInputScope(e.target.value)}
                     onKeyDown={(e) => {
@@ -414,32 +400,32 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         addScopeTag(aiTagInputScope);
                       }
                     }}
-                    className="text-xs px-2 py-1 outline-none flex-1 min-w-[120px] bg-transparent text-[#0F172A]"
+                    className="text-xs px-2 py-1 outline-none flex-1 min-w-[110px] bg-transparent text-slate-800"
                   />
                 </div>
               </div>
 
               {/* License Tags */}
-              <div className="mt-4">
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-1.5">
-                  涉及许可 / 备案 / 资质 <span className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">AI 建议 / 可自定义</span>
+              <div className="mt-3.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1">
+                  涉及许可 / 备案资质 <span className="text-slate-400 text-[10px] font-normal">AI 建议 / 可自定义</span>
                 </label>
-                <div className="min-h-[50px] p-2.5 border border-slate-200 rounded-xl bg-white flex flex-wrap items-center gap-1.5 focus-within:border-[#48BFA2] focus-within:ring-2 focus-within:ring-[#48BFA2]/15 transition-all">
+                <div className="min-h-[42px] p-2 border border-slate-200/80 rounded-xl bg-white flex flex-wrap items-center gap-1.5 focus-within:border-[#36B39E] transition-colors">
                   {survey.license.length === 0 ? (
                     <span className="text-xs text-slate-400 pl-1">
-                      点击上方「AI 智能填充」或在右侧输入后回车添加
+                      暂无前置许可，或输入后回车添加
                     </span>
                   ) : (
                     survey.license.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894]"
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#E6F7F2] text-[#2AA894]"
                       >
                         <span>{tag}</span>
                         <button
                           type="button"
                           onClick={() => removeLicenseTag(tag)}
-                          className="w-3.5 h-3.5 rounded-full hover:bg-slate-200 hover:text-red-500 flex items-center justify-center transition-colors"
+                          className="w-3.5 h-3.5 rounded hover:text-red-500 flex items-center justify-center transition-colors"
                         >
                           <X className="w-2.5 h-2.5" />
                         </button>
@@ -448,7 +434,7 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                   )}
                   <input
                     type="text"
-                    placeholder="+ 输入资质后回车添加"
+                    placeholder="+ 回车添加资质"
                     value={aiTagInputLicense}
                     onChange={(e) => setAiTagInputLicense(e.target.value)}
                     onKeyDown={(e) => {
@@ -457,17 +443,17 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         addLicenseTag(aiTagInputLicense);
                       }
                     }}
-                    className="text-xs px-2 py-1 outline-none flex-1 min-w-[120px] bg-transparent text-[#0F172A]"
+                    className="text-xs px-2 py-1 outline-none flex-1 min-w-[110px] bg-transparent text-slate-800"
                   />
                 </div>
               </div>
 
               {/* Sensitive Checklist */}
-              <div className="mt-4">
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-1.5">
-                  涉及敏感要素 <span className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">AI 自动匹配 / 支持手动微调</span>
+              <div className="mt-3.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1">
+                  涉及敏感行业要素
                 </label>
-                <div className="flex flex-wrap gap-2 p-3 border border-slate-200 rounded-xl bg-white">
+                <div className="flex flex-wrap gap-1.5 p-2.5 border border-slate-200/80 rounded-xl bg-white">
                   {[
                     '教培', '医疗/器械', '食品/餐饮', '进出口', '直播/MCN',
                     '金融/理财', '人力/劳务', '建筑/施工', '危化/环保', '网络文化/ICP', '其他'
@@ -478,10 +464,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={item}
                         onClick={() => toggleArrayItem('sensitive', item)}
-                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                           checked
-                            ? 'bg-[#E6F7F2] text-[#2AA894] border border-[#48BFA2]'
-                            : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
+                            ? 'bg-[#E6F7F2] text-[#2AA894] border border-[#36B39E]/50'
+                            : 'bg-slate-50 text-slate-600 border border-slate-200/70 hover:bg-slate-100'
                         }`}
                       >
                         {checked && <Check className="w-3 h-3 stroke-[3]" />}
@@ -512,12 +498,12 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               用于税务方案与纳税人身份评估。
             </p>
 
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  近期客户开票要求 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  近期开票要求 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-3 gap-2">
                   {['不确定', '增值税专用发票', '增值税普通发票'].map((val) => {
                     const active = survey.invoiceReq === val;
                     return (
@@ -525,10 +511,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => onChange({ ...survey, invoiceReq: val })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {val}
@@ -539,10 +525,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               </div>
 
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  预计月开票额 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  预计月开票额 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {['< 10 万', '10 - 50 万', '50 - 200 万', '> 200 万'].map((val) => {
                     const active = survey.monthlyAmount === val;
                     return (
@@ -550,10 +536,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => onChange({ ...survey, monthlyAmount: val })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {val}
@@ -564,8 +550,8 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               </div>
 
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  收入模式 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">至少选 1 项</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  收入模式 <span className="text-amber-600 text-[10px] font-semibold">至少选 1 项</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {['服务费', '货物销售', '平台抽佣', '项目/阶段款', '其他'].map((val) => {
@@ -575,10 +561,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => toggleArrayItem('revenue', val)}
-                        className={`py-2 px-3.5 rounded-xl border text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                        className={`py-1.5 px-3 rounded-lg border text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {active && <Check className="w-3 h-3 stroke-[3]" />}
@@ -594,26 +580,26 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
           {/* ==================== 04 股权与资本 ==================== */}
           <div 
             id="sec-equity"
-            className="rounded-3xl p-6 sm:p-8 mb-6 border border-slate-200 bg-white shadow-xs transition-all"
+            className="rounded-2xl p-5 sm:p-6 mb-5 border border-slate-200/80 bg-white transition-all"
           >
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>04 · 股权与资本</span>
+            <div className="flex items-center justify-between mb-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
+                <span>04 · 股权与资本</span>
+              </div>
+              <span className="text-xs text-slate-400">影响公司类型与认缴期限</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-2">
+            <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-4">
               股东结构与资本规模
             </h2>
-            <p className="text-sm text-[#64748B] mb-6">
-              影响公司类型选择、外资备案与出资期限合规。
-            </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  股东类型 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">至少选 1 项</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  股东类型 <span className="text-amber-600 text-[10px] font-semibold">至少选 1 项</span>
                 </label>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-3 gap-2">
                   {['自然人', '公司股东', '境外主体'].map((val) => {
                     const active = survey.shareholderType.includes(val);
                     return (
@@ -621,10 +607,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => toggleArrayItem('shareholderType', val)}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors flex items-center justify-center gap-1 cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {active && <Check className="w-3 h-3 stroke-[3]" />}
@@ -636,10 +622,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               </div>
 
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  股东人数 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  股东人数 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-3 gap-2">
                   {['1 个', '2 个', '3 个及以上'].map((val) => {
                     const active = survey.shareholderCount === val;
                     return (
@@ -647,10 +633,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => onChange({ ...survey, shareholderCount: val })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {val}
@@ -661,12 +647,12 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               </div>
 
               <div className="pt-3 border-t border-slate-100">
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  是否需要注册资本专家推荐 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  是否需要注册资本专家建议 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-2">
                   {[
-                    { label: '是 · 需要专家建议（默认推荐）', value: '是' },
+                    { label: '是 · 需要专家建议（默认）', value: '是' },
                     { label: '否 · 已有明确数额', value: '否' }
                   ].map((opt) => {
                     const active = survey.capitalRec === opt.value;
@@ -675,10 +661,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={opt.value}
                         onClick={() => onChange({ ...survey, capitalRec: opt.value })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {opt.label}
@@ -693,26 +679,26 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
           {/* ==================== 05 地址与场地 ==================== */}
           <div 
             id="sec-address"
-            className="rounded-3xl p-6 sm:p-8 mb-8 border border-slate-200 bg-white shadow-xs transition-all"
+            className="rounded-2xl p-5 sm:p-6 mb-6 border border-slate-200/80 bg-white transition-all"
           >
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#2AA894] mb-3 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>05 · 地址与场地</span>
+            <div className="flex items-center justify-between mb-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
+                <span>05 · 地址与场地</span>
+              </div>
+              <span className="text-xs text-slate-400">用于配置合规挂靠或场地租赁</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight mb-2">
+            <h2 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-4">
               注册地址与办公场地需求
             </h2>
-            <p className="text-sm text-[#64748B] mb-6">
-              用于判断是否需要园区合规挂靠地址或实际工位租赁资源。
-            </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  是否需要推荐注册地址 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  是否需要推荐注册地址 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-2">
                   {['是（需推荐）', '否（自有地址）'].map((val) => {
                     const active = survey.regAddress === val;
                     return (
@@ -720,10 +706,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => onChange({ ...survey, regAddress: val })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {val}
@@ -734,10 +720,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
               </div>
 
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-[#0F172A] mb-2">
-                  是否需要推荐实体办公场地 <span className="inline-block px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold">必选</span>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
+                  是否需要推荐实体办公场地 <span className="text-amber-600 text-[10px] font-semibold">必选</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-2">
                   {['是', '否'].map((val) => {
                     const active = survey.officeSpace === val;
                     return (
@@ -745,10 +731,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
                         type="button"
                         key={val}
                         onClick={() => onChange({ ...survey, officeSpace: val })}
-                        className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                           active
-                            ? 'border-[#48BFA2] bg-[#F4FCFA] text-[#2AA894] shadow-xs'
-                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                            ? 'border-[#36B39E] bg-[#F8FCFB] text-[#2AA894]'
+                            : 'border-slate-200/80 bg-white text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {val === '是' ? '是 · 需要推荐' : '否 · 暂不需要'}
@@ -763,21 +749,19 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
         </div>
       </div>
 
-      {/* ==================== Exact matching image.png Bottom Floating Bar ==================== */}
-      <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-100 py-3.5 px-6 shadow-md">
+      {/* ==================== Flat Bottom Floating Bar ==================== */}
+      <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/70 py-3 px-6">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
           
-          {/* Left Text matching image.png */}
-          <div className="text-sm text-[#64748B] select-none font-normal">
-            填写完成后可直接生成需求摘要
+          <div className="text-xs text-slate-400 select-none">
+            填写完成后将自动生成服务方案与透明报价
           </div>
 
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={handleReset}
-              className="px-7 py-2.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors cursor-pointer select-none"
+              className="px-5 py-2 rounded-full border border-slate-200/80 bg-white text-slate-600 text-xs font-medium hover:bg-slate-50 transition-colors cursor-pointer select-none"
             >
               重置
             </button>
@@ -785,10 +769,10 @@ export const SurveyStep: React.FC<SurveyStepProps> = ({
             <button
               type="button"
               onClick={handleValidateAndSubmit}
-              className="px-7 py-2.5 rounded-full bg-[#55C5A7] hover:bg-[#48BFA2] text-white text-sm font-medium shadow-xs transition-colors active:scale-95 flex items-center gap-1.5 cursor-pointer select-none"
+              className="px-6 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-medium transition-colors active:scale-95 flex items-center gap-1.5 cursor-pointer select-none"
             >
-              <span>生成需求摘要</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>生成需求方案</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
