@@ -57,6 +57,18 @@ export default function App() {
   // Detailed Registration and Docs upload state
   const [details, setDetails] = useState<RegistrationDetails>(INITIAL_REGISTRATION_DETAILS);
 
+  // Form submission status tracking
+  const [isDetailsSubmitted, setIsDetailsSubmitted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('banbu-registration-20260913-v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.status === 'submitted';
+      }
+    } catch (e) {}
+    return false;
+  });
+
   // Timeline / Delivery progress state
   const [timeline, setTimeline] = useState<TimelineNode[]>(INITIAL_TIMELINE_NODES);
 
@@ -106,10 +118,16 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Step 6: Submit details for review -> S-->>C: 提醒资料待核验
+  // Step 6: Submit details for review -> 跳转到“服务进度状态与办理清单”页，并更新填报状态
   const handleSubmitForReview = () => {
-    unlockStep('progress');
-    setCurrentStep('progress');
+    setIsDetailsSubmitted(true);
+    setOrder(prev => ({
+      ...prev,
+      status: 'paid',
+      paidAt: prev.paidAt || new Date().toLocaleString('zh-CN', { hour12: false })
+    }));
+    unlockStep('payment');
+    setCurrentStep('payment');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -249,6 +267,7 @@ export default function App() {
           <AgreementAndPaymentStep
             plan={plan}
             order={order}
+            isDetailsSubmitted={isDetailsSubmitted}
             onUpdateOrder={setOrder}
             onPaymentSuccess={handlePaymentSuccess}
             onProceedToFillDetails={handleProceedToFillDetails}
@@ -263,6 +282,7 @@ export default function App() {
           <AgreementAndPaymentStep
             plan={plan}
             order={order}
+            isDetailsSubmitted={isDetailsSubmitted}
             onUpdateOrder={setOrder}
             onPaymentSuccess={handlePaymentSuccess}
             onProceedToFillDetails={handleProceedToFillDetails}

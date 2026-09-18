@@ -34,6 +34,7 @@ import {
 interface AgreementAndPaymentStepProps {
   plan: RegistrationPlan;
   order: PaymentOrder;
+  isDetailsSubmitted?: boolean;
   onUpdateOrder?: (order: PaymentOrder | ((prev: PaymentOrder) => PaymentOrder)) => void;
   onPaymentSuccess?: () => void;
   onPaid?: (orderData: Partial<PaymentOrder>) => void;
@@ -44,6 +45,7 @@ interface AgreementAndPaymentStepProps {
 export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = ({
   plan,
   order,
+  isDetailsSubmitted,
   onUpdateOrder,
   onPaymentSuccess,
   onPaid,
@@ -51,6 +53,20 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   onProceedToFillDetails
 }) => {
   const isPaid = order?.status === 'paid';
+
+  // Check persisted submission status
+  const [localSubmitted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('banbu-registration-20260913-v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.status === 'submitted';
+      }
+    } catch (e) {}
+    return false;
+  });
+
+  const effectiveSubmitted = Boolean(isDetailsSubmitted || localSubmitted);
 
   const formatMoney = (val?: number | null) => {
     if (val === undefined || val === null || isNaN(val)) return '0';
@@ -128,20 +144,25 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   const checklistItems = [
     {
       title: '企业注册申报资料在线填报与合规初审',
-      desc: '在线登记企业备选字号、股东股权架构、法人/监事实名信息及经营场所证明。专属顾问在您提交后 2 小时内完成合规审核并推进后续各项审批。',
-      status: 'in_progress',
-      statusLabel: '进行中 · 待填报',
-      dept: '当前任务 / 经办人在线填报',
-      time: '第一步（当前阶段）',
-      isPrereq: true
+      desc: effectiveSubmitted
+        ? '已成功提交企业名称排查、股东股权架构、主要管理人员实名信息及经营场所证明。专属顾问正在进行合规初核，预计 2 小时内完成并对接网申审批系统。'
+        : '在线登记企业备选字号、股东股权架构、主要人员实名信息及经营场所证明。专属顾问在您提交后 2 小时内完成合规审核并推进后续各项审批。',
+      status: effectiveSubmitted ? 'completed' : 'in_progress',
+      statusLabel: effectiveSubmitted ? '已完成填报 · 专员初审中' : '进行中 · 待填报',
+      dept: effectiveSubmitted ? '已提交 · 企服专员初核中' : '独立专项填报模块 / 经办人在线录入',
+      time: effectiveSubmitted ? '已提交（正在初核）' : '核心前置任务（约 10~15 分钟）',
+      isPrereq: !effectiveSubmitted
     },
     {
       title: '市场监督管理局行政审批送审与执照领办',
-      desc: '【前置条件：资料审核通过后启动】专人对接属地市监行政审批网申系统编制申报底稿，协同全体股东完成实名认证电子签名后，领办纸质营业执照正副本原件。',
-      status: 'waiting',
-      statusLabel: '待资料审核后启动',
+      desc: effectiveSubmitted
+        ? '【当前阶段】专人对接属地市监行政审批网申系统编制申报底稿，协同全体股东完成实名认证电子签名后，领办纸质营业执照正副本原件。'
+        : '【前置条件：资料审核通过后启动】专人对接属地市监行政审批网申系统编制申报底稿，协同全体股东完成实名认证电子签名后，领办纸质营业执照正副本原件。',
+      status: effectiveSubmitted ? 'in_progress' : 'waiting',
+      statusLabel: effectiveSubmitted ? '进行中 · 底稿编制与政务网申' : '待资料审核后启动',
       dept: '市场监督管理局',
-      time: '资料审核通过后 1~2 工作日'
+      time: effectiveSubmitted ? '预计 1~2 工作日办结' : '资料审核通过后 1~2 工作日',
+      isPrereq: effectiveSubmitted
     },
     {
       title: '公安特行备案防伪芯片印章刻制（全套5枚）',
@@ -546,7 +567,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                     </div>
                   </div>
                   <span className="text-xs text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/70 self-start sm:self-auto font-medium">
-                    第 1 步待填报
+                    {effectiveSubmitted ? '资料已提交 · 专员初审中' : '申报资料待填报'}
                   </span>
                 </div>
 
@@ -608,7 +629,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
 
                         <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
                           <span className="text-[11px] text-slate-400">{item.time}</span>
-                          {isCurrentActive && (
+                          {isCurrentActive && !effectiveSubmitted && (
                             <button
                               type="button"
                               onClick={() => {
@@ -616,8 +637,20 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                               }}
                               className="px-4 py-1.5 rounded-xl bg-[#2AA894] hover:bg-[#1D6C5E] text-white font-bold text-xs shadow-sm hover:shadow transition-all cursor-pointer flex items-center gap-1"
                             >
-                              <span>立即去填报</span>
+                              <span>进入资料填报模块</span>
                               <ArrowRight className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                          {isDone && index === 0 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (onProceedToFillDetails) onProceedToFillDetails();
+                              }}
+                              className="px-3 py-1.5 rounded-xl border border-emerald-300 bg-white hover:bg-emerald-50 text-[#1D6C5E] font-bold text-xs shadow-2xs transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                            >
+                              <FileEdit className="w-3.5 h-3.5" />
+                              <span>查看/修改申报资料</span>
                             </button>
                           )}
                           <span

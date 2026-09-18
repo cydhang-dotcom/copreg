@@ -153,13 +153,13 @@ export interface RegistrationDetails {
 }
 
 export type ProcessStep =
-  | 'survey'       // 1. 初步业务信息调研
-  | 'proposal'     // 2. 注册方案与服务报价
-  | 'agreement'    // 3. 服务确认与短信验证
-  | 'payment'      // 4. 在线支付服务费用
-  | 'group'        // 5. 专属服务群（含 AI 助手）
-  | 'fill_details' // 6. 填写注册信息与上传资料
-  | 'progress';    // 7. 客服核验与交付团队办理进度
+  | 'survey'       // 1. 初步业务信息调研与评估
+  | 'proposal'     // 2. 注册方案与服务报价确认
+  | 'agreement'    // 3. 服务确认与短信验证（合并于支付）
+  | 'payment'      // 3. 协议确认与在线支付服务费用
+  | 'group'        // 4. 专属服务群（含专员与智能助手）
+  | 'fill_details' // 独立专项模块：企业注册申报资料填报与初审
+  | 'progress';    // 5. 企业开办与政务交付办理进度追踪
 
 export interface TimelineNode {
   id: string;

@@ -126,11 +126,11 @@ export const ProgressAndReviewStep: React.FC<ProgressAndReviewStepProps> = ({
           <section className="mb-5">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#2AA894] mb-2 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-[#36B39E]"></span>
-              <span>第 6 步 · 进度追踪</span>
+              <span>第 5 步 · 进度追踪</span>
             </div>
 
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-1.5">
-              <span className="text-[#2AA894]">第 6 步：</span><span className="text-[#1D6C5E]">企业开办与政务交付办理进度</span>
+              <span className="text-[#2AA894]">第 5 步：</span><span className="text-[#1D6C5E]">企业开办与政务交付办理进度</span>
             </h1>
 
             <p className="text-xs text-slate-500 max-w-2xl leading-relaxed">
