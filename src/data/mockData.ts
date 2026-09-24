@@ -285,7 +285,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-std-fee',
@@ -294,7 +294,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       }
     ];
 
@@ -313,7 +313,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 800,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-seal',
@@ -322,7 +322,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-fee',
@@ -331,7 +331,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-bank',
@@ -340,7 +340,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 400,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-tax',
@@ -349,7 +349,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-social-setup',
@@ -358,7 +358,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-social-service',
@@ -367,7 +367,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 200,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-account',
@@ -398,7 +398,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 800,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-seal',
@@ -407,7 +407,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-fee',
@@ -416,7 +416,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-bank',
@@ -425,7 +425,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 400,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-tax',
@@ -434,7 +434,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-social-setup',
@@ -443,7 +443,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-social-service',
@@ -452,7 +452,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 200,
         isFree: true,
-        tag: '已含'
+        tag: '免除'
       },
       {
         id: 'item-bnd-account',

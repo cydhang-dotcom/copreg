@@ -284,7 +284,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                               <span>{item.name}</span>
                               {isFreeItem && (
                                 <span className="text-[10px] text-[#2AA894] bg-[#E6F7F2] px-1.5 py-0.2 rounded border border-[#36B39E]/30">
-                                  {item.tag || '已含'}
+                                  免除
                                 </span>
                               )}
                             </div>
@@ -298,7 +298,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                           </div>
                           <div className="col-span-2 text-right font-medium text-slate-800">
                             {isFreeItem ? (
-                              <span className="text-[#2AA894] font-medium text-xs">已含</span>
+                              <span className="text-[#2AA894] font-medium text-xs">免除</span>
                             ) : (
                               <span>¥{formatMoney(current)}</span>
                             )}
@@ -965,7 +965,7 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                       <div className="text-right shrink-0 font-medium text-xs pl-5 sm:pl-0">
                         {item.price === 0 ? (
                           <div className="flex items-center gap-1.5 justify-end">
-                            <span className="text-[#2AA894] font-semibold">¥0 (已含)</span>
+                            <span className="text-[#2AA894] font-semibold">免除</span>
                             <span className="text-slate-400 line-through text-[11px]">¥{formatMoney(item.originalPrice)}</span>
                           </div>
                         ) : (

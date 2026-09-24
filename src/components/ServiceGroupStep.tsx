@@ -111,7 +111,7 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
               onClick={onProceedToFillDetails}
               className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white font-medium text-xs shadow-xs transition-colors flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
             >
-              <span>进入资料填报模块</span>
+              <span>前往完善政务申报资料（第 4 步）</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -373,7 +373,7 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
               onClick={onProceedToFillDetails}
               className="px-6 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <span>进入申报资料填报模块</span>
+              <span>前往完善政务申报资料（第 4 步）</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

@@ -577,6 +577,10 @@ export default function App() {
               updateActiveApp(prev => ({ ...prev, currentStep: 'payment' }));
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            companyName={activeApp.companyName}
+            plan={activeApp.plan}
+            survey={activeApp.survey}
+            order={activeApp.order}
           />
         )}
 
