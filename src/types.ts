@@ -40,6 +40,7 @@ export interface OptionalAddonService {
   name: string;
   desc: string;
   price: number;
+  originalPrice?: number;
   unit: string;
   defaultSelected?: boolean;
 }
@@ -172,4 +173,20 @@ export interface TimelineNode {
   detail: string;
   requiresAction?: boolean;
   actionName?: string;
+}
+
+export interface RegistrationApplication {
+  id: string;
+  companyName: string;
+  createdAt: string;
+  currentStep: ProcessStep;
+  unlockedSteps: ProcessStep[];
+  survey: SurveyData;
+  plan: RegistrationPlan;
+  order: PaymentOrder;
+  messages: ChatMessage[];
+  details: RegistrationDetails;
+  isDetailsSubmitted: boolean;
+  timeline: TimelineNode[];
+  isDiscarded?: boolean;
 }

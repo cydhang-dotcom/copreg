@@ -182,7 +182,7 @@ export const AI_INDUSTRY_TEMPLATES = [
 
 export const DEFAULT_AI_TEMPLATE = AI_INDUSTRY_TEMPLATES[0];
 
-export const ALL_ADDON_IDS = ['addon-bank', 'addon-tax', 'addon-social'];
+export const ALL_ADDON_IDS = ['addon-bank', 'addon-tax', 'addon-social', 'addon-zero-tax'];
 
 export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
   {
@@ -190,6 +190,7 @@ export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
     name: '银行对公账户开通',
     desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
     price: 200,
+    originalPrice: 400,
     unit: '次',
     defaultSelected: false
   },
@@ -197,7 +198,8 @@ export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
     id: 'addon-tax',
     name: '电子税务局开户',
     desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
-    price: 300,
+    price: 100,
+    originalPrice: 300,
     unit: '次',
     defaultSelected: false
   },
@@ -205,8 +207,18 @@ export const OPTIONAL_ADDON_SERVICES: OptionalAddonService[] = [
     id: 'addon-social',
     name: '办理社保公积金开户',
     desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
-    price: 200,
+    price: 100,
+    originalPrice: 300,
     unit: '次',
+    defaultSelected: false
+  },
+  {
+    id: 'addon-zero-tax',
+    name: '企业零申报服务（全年12个月）',
+    desc: '专人按期代办月度/季度增值税及附加税、企业所得税零申报，出具官方申报凭据，含年度所得税汇算清缴与年报指导',
+    price: 600,
+    originalPrice: 1200,
+    unit: '年',
     defaultSelected: false
   }
 ];
@@ -273,7 +285,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '惠企政策全免'
+        tag: '已含'
       },
       {
         id: 'item-std-fee',
@@ -282,7 +294,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '政务规费全免'
+        tag: '已含'
       }
     ];
 
@@ -301,7 +313,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 800,
         isFree: true,
-        tag: '已含企业注册套餐'
+        tag: '已含'
       },
       {
         id: 'item-bnd-seal',
@@ -310,7 +322,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '已含企业注册套餐'
+        tag: '已含'
       },
       {
         id: 'item-bnd-fee',
@@ -319,24 +331,16 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '政务规费全免'
-      },
-      {
-        id: 'item-bnd-account',
-        name: '全年财务代记账服务（小规模纳税人 12个月）',
-        desc: '资深注册会计师1对1负责：每月原始凭证审核、记账凭证装订、编制资产负债表与利润表、按期纳税申报（增值税、附加税、所得税、个税）及年度汇算清缴',
-        price: 2500,
-        originalPrice: 4800,
-        tag: '小规模记账托管 ¥2,500'
+        tag: '已含'
       },
       {
         id: 'item-bnd-bank',
         name: '银行对公账户开通',
         desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
         price: 0,
-        originalPrice: 200,
+        originalPrice: 400,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-tax',
@@ -345,25 +349,33 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-social-setup',
         name: '办理社保公积金开户',
         desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
         price: 0,
-        originalPrice: 200,
+        originalPrice: 300,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-social-service',
         name: '社保公积金服务',
         desc: '社保公积金系统企业专属专户全年合规状态维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
         price: 0,
-        originalPrice: 1000,
+        originalPrice: 200,
         isFree: true,
-        tag: '全年无忧默认服务'
+        tag: '已含'
+      },
+      {
+        id: 'item-bnd-account',
+        name: '全年财务代记账服务（小规模纳税人 12个月）',
+        desc: '资深注册会计师1对1负责：每月原始凭证审核、记账凭证装订、编制资产负债表与利润表、按期纳税申报（增值税、附加税、所得税、个税）及年度汇算清缴',
+        price: 2500,
+        originalPrice: 3600,
+        tag: '小规模记账托管 ¥2,500'
       }
     ];
 
@@ -371,10 +383,10 @@ export function generatePlanFromSurvey(
       '营业执照正副本（纸质原件 + 电子营业执照）【包含企业注册套餐】',
       '公安备案防伪芯片印章5枚（公章、财务章、发票章、合同章、法人章）【包含企业注册套餐】',
       '公司章程及股东会决议书（工商归档备案全套版）【包含企业注册套餐】',
-      '全年小规模财务代记账服务协议与12期财务凭证账簿及纳税申报表',
       '银行基本户开户信息表与网银U盾',
       '电子税务局企业身份开通与新电局实名绑定凭据',
-      '企业社保与住房公积金独立单位专户设立凭据'
+      '企业社保与住房公积金独立单位专户设立凭据',
+      '全年小规模财务代记账服务协议与12期财务凭证账簿及纳税申报表'
     ];
   } else {
     tierName = '全年无忧服务（一般纳税人）';
@@ -386,7 +398,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 800,
         isFree: true,
-        tag: '已含企业注册套餐'
+        tag: '已含'
       },
       {
         id: 'item-bnd-seal',
@@ -395,7 +407,7 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 600,
         isFree: true,
-        tag: '已含企业注册套餐'
+        tag: '已含'
       },
       {
         id: 'item-bnd-fee',
@@ -404,24 +416,16 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '政务规费全免'
-      },
-      {
-        id: 'item-bnd-account',
-        name: '全年财务代记账服务（一般纳税人 12个月）',
-        desc: '资深注册会计师1对1负责：每月增值税专用发票进项认证勾选抵扣、原始凭证审核、记账凭证装订、编制财务报表、纳税申报及年度汇算清缴',
-        price: 3000,
-        originalPrice: 5800,
-        tag: '一般人记账托管 ¥3,000'
+        tag: '已含'
       },
       {
         id: 'item-bnd-bank',
         name: '银行对公账户开通',
         desc: '合作商业银行免排队专属绿色通道，专人对接协助开立企业基本户、办理企业网银U盾及结算权限',
         price: 0,
-        originalPrice: 200,
+        originalPrice: 400,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-tax',
@@ -430,25 +434,33 @@ export function generatePlanFromSurvey(
         price: 0,
         originalPrice: 300,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-social-setup',
         name: '办理社保公积金开户',
         desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
         price: 0,
-        originalPrice: 200,
+        originalPrice: 300,
         isFree: true,
-        tag: '全年无忧必选服务'
+        tag: '已含'
       },
       {
         id: 'item-bnd-social-service',
         name: '社保公积金服务',
         desc: '社保公积金系统企业专属专户全年合规状态维护与基数核定指导（注：本项不含员工增减员及代缴申报）',
         price: 0,
-        originalPrice: 1000,
+        originalPrice: 200,
         isFree: true,
-        tag: '全年无忧默认服务'
+        tag: '已含'
+      },
+      {
+        id: 'item-bnd-account',
+        name: '全年财务代记账服务（一般纳税人 12个月）',
+        desc: '资深注册会计师1对1负责：每月增值税专用发票进项认证勾选抵扣、原始凭证审核、记账凭证装订、编制财务报表、纳税申报及年度汇算清缴',
+        price: 3000,
+        originalPrice: 4600,
+        tag: '一般人记账托管 ¥3,000'
       }
     ];
 
@@ -456,14 +468,14 @@ export function generatePlanFromSurvey(
       '营业执照正副本（纸质原件 + 电子营业执照）【包含企业注册套餐】',
       '公安备案防伪芯片印章5枚（公章、财务章、发票章、合同章、法人章）【包含企业注册套餐】',
       '公司章程及股东会决议书（工商归档备案全套版）【包含企业注册套餐】',
-      '全年一般纳税人财务代记账服务协议与12期财务账簿及专票申报底稿',
       '银行基本户开户信息表与网银U盾',
       '电子税务局企业身份开通与新电局实名绑定凭据',
-      '企业社保与住房公积金独立单位专户设立凭据'
+      '企业社保与住房公积金独立单位专户设立凭据',
+      '全年一般纳税人财务代记账服务协议与12期财务账簿及专票申报底稿'
     ];
   }
 
-  // 自选增值服务：仅在企业注册服务中提供可选加购（银行开户、税局开户、社保公积金开户）
+  // 自选增值服务：仅在企业注册服务中提供可选加购（银行开户、税局开户、社保公积金开户、零申报服务）
   if (normalizedTier === 'standard') {
     if (activeAddons.includes('addon-bank')) {
       items.push({
@@ -481,9 +493,9 @@ export function generatePlanFromSurvey(
         id: 'addon-tax',
         name: '电子税务局开户',
         desc: '国家税务总局新电局税种核定、财务负责人实名绑定、数电发票开票额度核定及首月开业建账辅导',
-        price: 300,
-        originalPrice: 500,
-        tag: '自选增值 ¥300/次'
+        price: 100,
+        originalPrice: 300,
+        tag: '自选增值 ¥100/次'
       });
     }
 
@@ -492,10 +504,22 @@ export function generatePlanFromSurvey(
         id: 'addon-social',
         name: '办理社保公积金开户',
         desc: '办理企业社保局独立单位专户开户、住房公积金管理中心单位缴存登记开户设立，开具官方设立凭据',
-        price: 200,
-        originalPrice: 500,
-        tag: '自选增值 ¥200/次'
+        price: 100,
+        originalPrice: 300,
+        tag: '自选增值 ¥100/次'
       });
+    }
+
+    if (activeAddons.includes('addon-zero-tax')) {
+      items.push({
+        id: 'addon-zero-tax',
+        name: '企业零申报服务（全年12个月）',
+        desc: '专人按期代办月度/季度增值税及附加税、企业所得税零申报，出具官方申报凭据，含年度所得税汇算清缴与年报指导',
+        price: 600,
+        originalPrice: 1200,
+        tag: '自选增值 ¥600/年'
+      });
+      deliverables.push('全年企业税务零申报代办服务协议与各期申报回执凭据');
     }
   }
 
@@ -512,12 +536,40 @@ export function generatePlanFromSurvey(
   }
   const totalDiscount = Math.max(0, totalOriginal - finalPrice);
 
+  // 智能识别股东架构与入股特征
+  const hasCorporate = survey.shareholderType?.some(t => t.includes('公司') || t.includes('法人'));
+  const hasForeign = survey.shareholderType?.some(t => t.includes('境外') || t.includes('外资'));
+  const isMulti = survey.shareholderCount === '2 个' || survey.shareholderCount === '3 个及以上';
+  
+  let dynamicCompanyType = matched.companyType;
+  if (hasCorporate) {
+    dynamicCompanyType = '多元有限责任公司（含法人/机构股东入股）';
+  } else if (hasForeign) {
+    dynamicCompanyType = '有限责任公司（涉外资参股）';
+  } else if (isMulti) {
+    dynamicCompanyType = '多元有限责任公司（自然人合伙设立）';
+  } else if (survey.shareholderCount === '1 个') {
+    dynamicCompanyType = '自然人独资有限责任公司';
+  }
+
+  const hasOwnAddr = survey.regAddress.includes('否');
+  const dynamicRiskTips = [...matched.riskTips];
+  if (hasCorporate) {
+    dynamicRiskTips.unshift('对方作为法人股东入股，须提供母公司营业执照副本复印件（加盖公章）、法定代表人身份证及股东会决议；建议提前在章程中约定表决权比例，规避50:50股权僵局。');
+  } else if (isMulti) {
+    dynamicRiskTips.unshift('合伙设立有限责任公司，建议合理配置股权表决权比例（如67%绝对控制或51%相对控制），明确分红与退出机制，防范决策分歧风险。');
+  }
+
+  if (hasOwnAddr) {
+    dynamicRiskTips.push('自有/租赁办公场地必须符合商事登记规划用途（商业/办公/厂房，住宅依法不得注册），备齐《不动产权证书》复印件与租赁协议，配合银行客户经理上门实地尽调拍照。');
+  }
+
   return {
     selectedTier: normalizedTier,
     taxpayerTier: autoTaxpayerTier,
     tierName,
     companyNameProposal: survey.companyDesc.slice(0, 12) + '…（建议科技/贸易/实业组织字号）',
-    companyType: matched.companyType,
+    companyType: dynamicCompanyType,
     taxpayerIdentity: autoTaxpayerTier === 'general' 
       ? '增值税一般纳税人（满足客户大额专票开具与全额进项税抵扣）' 
       : '增值税小规模纳税人（享受月度10万或季度30万以内免征增值税优惠）',
@@ -526,14 +578,14 @@ export function generatePlanFromSurvey(
       : '初创阶段轻资产运营，小规模纳税人申报简便、充分享受国家普惠性减税降费优惠政策。',
     capitalAmount: survey.capitalRec === '否' ? survey.capitalAmount : '建议 100 万元人民币',
     capitalAdvice: '遵循新《公司法》注册资本5年内实缴规则，出资方式可选择货币、知识产权或实物，建议股东制定分期缴资计划。',
-    registeredAddressAdvice: survey.regAddress.includes('是')
-      ? '我们已为您匹配享受园区政策的合规商务秘书集群托管地址，支持合法对公银行开户与工商年报。'
-      : '使用自有办公场地注册需提供产权证复印件及租赁协议，确保房屋规划用途符合登记标准。',
+    registeredAddressAdvice: hasOwnAddr
+      ? '使用自有或租赁实体商用场地登记，需备齐商业或办公用途《不动产权证书》及租赁合同，规范悬挂招牌并配合银行与市监上门实地尽调。'
+      : '我们已为您匹配享受园区政策的合规商务秘书集群托管地址，保障工商税务专递信函通达，协同配合银行上门开户。',
     preQualifications: survey.sensitive.includes('进出口')
       ? ['海关进出口收发货人登记', '外汇管理局名录申报']
       : ['名称自主申报核准'],
     postQualifications: survey.license.length > 0 ? survey.license : matched.license,
-    riskTips: matched.riskTips,
+    riskTips: dynamicRiskTips,
     items,
     selectedAddons: activeAddons,
     totalOriginal,

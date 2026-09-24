@@ -28,7 +28,8 @@ import {
   AlertCircle,
   Sparkles,
   ChevronRight,
-  FileEdit
+  FileEdit,
+  Trash2
 } from 'lucide-react';
 
 interface AgreementAndPaymentStepProps {
@@ -40,6 +41,7 @@ interface AgreementAndPaymentStepProps {
   onPaid?: (orderData: Partial<PaymentOrder>) => void;
   onBack: () => void;
   onProceedToFillDetails?: () => void;
+  onDiscardCurrentService?: () => void;
 }
 
 export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = ({
@@ -50,9 +52,11 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
   onPaymentSuccess,
   onPaid,
   onBack,
-  onProceedToFillDetails
+  onProceedToFillDetails,
+  onDiscardCurrentService
 }) => {
   const isPaid = order?.status === 'paid';
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
 
   // Check persisted submission status
   const [localSubmitted] = useState<boolean>(() => {
@@ -261,14 +265,16 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                 <div className="border border-slate-200/80 rounded-xl overflow-hidden mb-4">
                   <div className="bg-slate-50/80 px-3.5 py-2 grid grid-cols-12 text-xs font-medium text-slate-500 border-b border-slate-200/80">
                     <span className="col-span-6">服务项目及交付标准</span>
-                    <span className="col-span-3 text-right">参考原价</span>
-                    <span className="col-span-3 text-right">结算金额</span>
+                    <span className="col-span-2 text-right">参考原价</span>
+                    <span className="col-span-2 text-right">优惠免收</span>
+                    <span className="col-span-2 text-right">结算金额</span>
                   </div>
 
                   <div className="divide-y divide-slate-100 text-xs text-slate-700">
                     {items.map((item, idx) => {
                       const orig = item?.originalPrice ?? item?.price ?? 0;
                       const current = item?.price ?? 0;
+                      const waived = Math.max(0, orig - current);
                       const isFreeItem = item?.isFree || item?.isGift || current === 0;
 
                       return (
@@ -277,19 +283,22 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                             <div className="font-medium text-slate-800 flex items-center gap-1.5 flex-wrap">
                               <span>{item.name}</span>
                               {isFreeItem && (
-                                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200/60">
-                                  政策全免
+                                <span className="text-[10px] text-[#2AA894] bg-[#E6F7F2] px-1.5 py-0.2 rounded border border-[#36B39E]/30">
+                                  {item.tag || '已含'}
                                 </span>
                               )}
                             </div>
                             <span className="text-[11px] text-slate-400 block mt-0.5 truncate">{item.desc}</span>
                           </div>
-                          <div className="col-span-3 text-right text-slate-400 line-through">
+                          <div className="col-span-2 text-right text-slate-400 line-through">
                             ¥{formatMoney(orig)}
                           </div>
-                          <div className="col-span-3 text-right font-medium text-slate-800">
+                          <div className="col-span-2 text-right text-[#2AA894] font-medium">
+                            {waived > 0 ? `-¥${formatMoney(waived)}` : '—'}
+                          </div>
+                          <div className="col-span-2 text-right font-medium text-slate-800">
                             {isFreeItem ? (
-                              <span className="text-emerald-600 font-bold">¥0 (免收)</span>
+                              <span className="text-[#2AA894] font-medium text-xs">已含</span>
                             ) : (
                               <span>¥{formatMoney(current)}</span>
                             )}
@@ -408,14 +417,28 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
               {/* Bottom Sticky Action Bar */}
               <div className="fixed left-0 right-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 py-3 px-6">
                 <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
-                  <button
-                    type="button"
-                    onClick={onBack}
-                    className="px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    <span>返回修改方案</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={onBack}
+                      className="px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>返回修改方案</span>
+                    </button>
+
+                    {onDiscardCurrentService && (
+                      <button
+                        type="button"
+                        onClick={() => setShowDiscardConfirm(true)}
+                        className="px-3 py-2 rounded-full border border-rose-200/80 bg-rose-50/60 hover:bg-rose-100 text-rose-600 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+                        title="未支付前可作废此服务"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">作废此服务</span>
+                      </button>
+                    )}
+                  </div>
 
                   <div className="flex items-center gap-3">
                     <div className="hidden sm:block text-right">
@@ -435,6 +458,44 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                   </div>
                 </div>
               </div>
+
+              {/* Discard Confirmation Modal */}
+              {showDiscardConfirm && (
+                <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+                  <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4 mx-auto">
+                      <Trash2 className="w-6 h-6 stroke-[2]" />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-900 text-center mb-2">
+                      确认作废当前注册服务？
+                    </h3>
+                    <p className="text-xs text-slate-500 text-center leading-relaxed mb-6">
+                      作废后，当前未支付的订单、委托协议及已选方案将被清除。您可以重新发起新的公司设立服务。
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setShowDiscardConfirm(false)}
+                        className="py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-600 hover:bg-slate-50 cursor-pointer"
+                      >
+                        再想想
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowDiscardConfirm(false);
+                          if (onDiscardCurrentService) {
+                            onDiscardCurrentService();
+                          }
+                        }}
+                        className="py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-xs cursor-pointer"
+                      >
+                        确认作废
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             /* ======================================================= */
@@ -903,9 +964,17 @@ export const AgreementAndPaymentStep: React.FC<AgreementAndPaymentStepProps> = (
                       </div>
                       <div className="text-right shrink-0 font-medium text-xs pl-5 sm:pl-0">
                         {item.price === 0 ? (
-                          <span className="text-emerald-600">¥0 (免费)</span>
+                          <div className="flex items-center gap-1.5 justify-end">
+                            <span className="text-[#2AA894] font-semibold">¥0 (已含)</span>
+                            <span className="text-slate-400 line-through text-[11px]">¥{formatMoney(item.originalPrice)}</span>
+                          </div>
                         ) : (
-                          <span className="text-slate-800">¥{formatMoney(item.price)}</span>
+                          <div className="flex items-center gap-1.5 justify-end">
+                            <span className="text-slate-800">¥{formatMoney(item.price)}</span>
+                            {item.originalPrice > item.price && (
+                              <span className="text-slate-400 line-through text-[11px]">¥{formatMoney(item.originalPrice)}</span>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>

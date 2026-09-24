@@ -28,3 +28,37 @@
     background-color: #FFFFFF;
   }
 }
+
+.font-formal-serif {
+  font-family: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+}
+
+.font-cinzel {
+  font-family: "Cinzel", Georgia, "Times New Roman", serif;
+}
+
+/* Formal document double rules */
+.border-double-formal {
+  border-style: double;
+  border-width: 3px;
+}
+
+/* Printable paper styling */
+@media print {
+  body {
+    background: white !important;
+    color: #111827 !important;
+  }
+  header, nav, .no-print, button, [role="button"], #sec-proposal-packages, #sec-proposal-contract, #sec-proposal-addons, .fixed {
+    display: none !important;
+  }
+  #sec-proposal-arch {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
