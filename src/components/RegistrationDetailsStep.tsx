@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { RegistrationDetails, SurveyData, RegistrationPlan, PaymentOrder } from '../types';
+import { RegistrationDetails } from '../types';
 import {
   RegistrationFullForm,
   ValidationErrorItem,
@@ -39,12 +39,6 @@ import {
   X,
   FileText,
   Check,
-  ChevronDown,
-  ChevronUp,
-  Compass,
-  Sparkles,
-  Building2,
-  FileCheck2,
 } from 'lucide-react';
 
 interface RegistrationDetailsStepProps {
@@ -52,10 +46,6 @@ interface RegistrationDetailsStepProps {
   onUpdateDetails: (details: RegistrationDetails) => void;
   onSubmitForReview: () => void;
   onBackToGroup: () => void;
-  companyName?: string;
-  plan?: RegistrationPlan;
-  survey?: SurveyData;
-  order?: PaymentOrder;
 }
 
 const CHAPTERS = [
@@ -71,10 +61,6 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
   onUpdateDetails,
   onSubmitForReview,
   onBackToGroup,
-  companyName,
-  plan,
-  survey,
-  order,
 }) => {
   // Main form state
   const [form, setForm] = useState<RegistrationFullForm>(() => {
@@ -117,7 +103,6 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
   const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
   const [showVerifyModal, setShowVerifyModal] = useState<boolean>(false);
   const [showWecomModal, setShowWecomModal] = useState<boolean>(false);
-  const [showDiffGuide, setShowDiffGuide] = useState<boolean>(true);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -519,233 +504,23 @@ export const RegistrationDetailsStep: React.FC<RegistrationDetailsStepProps> = (
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-4">
-        {/* ==================== 1. 全流程路线定位导航（解决“不知道现在哪里”） ==================== */}
-        <section className="mb-6 p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2AA894] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2AA894]"></span>
-              </span>
-              <span className="text-xs font-bold text-slate-800">企业开办全流程定位</span>
-              <span className="text-[11px] text-slate-400 hidden sm:inline">· 正在进行第 4 环节（政务申报与合规初审）</span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-semibold text-[#1D6C5E] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full border border-[#2AA894]/25">
-                阶段 4 / 5 · 履约执行中
-              </span>
-            </div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 pb-4">
+        {/* ==================== HEADING ==================== */}
+        <section className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              <span className="text-[#1D6C5E]">企业注册申报资料填报与初审</span>
+            </h1>
           </div>
 
-          {/* 5-step horizontal progression cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-            {/* Step 1 */}
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 border border-slate-200/60 text-slate-600">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-[#1D6C5E] flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 stroke-[3]" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] text-slate-400 font-medium leading-none mb-1">第 1 步 · 已完成</div>
-                <div className="text-xs font-semibold text-slate-700 truncate leading-tight">需求意向评估</div>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 border border-slate-200/60 text-slate-600">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-[#1D6C5E] flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 stroke-[3]" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] text-slate-400 font-medium leading-none mb-1">第 2 步 · 已完成</div>
-                <div className="text-xs font-semibold text-slate-700 truncate leading-tight">设立方案确认</div>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 border border-slate-200/60 text-slate-600">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-[#1D6C5E] flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 stroke-[3]" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] text-slate-400 font-medium leading-none mb-1">第 3 步 · 已签约</div>
-                <div className="text-xs font-semibold text-slate-700 truncate leading-tight">协议签署与支付</div>
-              </div>
-            </div>
-
-            {/* Step 4 (Current) */}
-            <div className="col-span-2 sm:col-span-1 flex items-center gap-2 p-2 rounded-xl bg-gradient-to-r from-[#F4FBF9] to-white border-2 border-[#2AA894] text-[#1D6C5E] shadow-2xs ring-2 ring-[#2AA894]/15">
-              <div className="w-5 h-5 rounded-full bg-[#2AA894] text-white flex items-center justify-center shrink-0 text-[11px] font-bold">
-                4
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] text-[#2AA894] font-bold leading-none mb-1">当前进行中</div>
-                <div className="text-xs font-bold text-[#1D6C5E] truncate leading-tight">申报资料填报初审</div>
-              </div>
-            </div>
-
-            {/* Step 5 */}
-            <div className="col-span-2 sm:col-span-1 flex items-center gap-2 p-2 rounded-xl bg-slate-50/50 border border-slate-200/40 text-slate-400">
-              <div className="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center shrink-0 text-[11px] font-medium">
-                5
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] text-slate-400 leading-none mb-1">下一步待办</div>
-                <div className="text-xs font-medium text-slate-500 truncate leading-tight">市监局审批领照</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ==================== 2. 当前模块标题与业务背景 ==================== */}
-        <section className="mb-5">
-          <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-[#E6F7F2] text-[#1D6C5E] border border-[#2AA894]/30 select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2AA894]" />
-              <span className="font-bold">政务履约阶段 · 第 4 步</span>
-              <span className="text-[#2AA894]">·</span>
-              <span>企业注册申报资料填报与初审</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={onBackToGroup}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all shadow-2xs cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
-              <span>返回服务进度与办理清单</span>
-            </button>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-1.5 text-slate-900">
-                <span className="text-[#2AA894]">第 4 步：</span><span className="text-[#1D6C5E]">企业注册申报资料填报与初审</span>
-              </h1>
-              <p className="text-xs text-slate-500 max-w-2xl leading-relaxed">
-                您已完成前期需求规划与费用支付。现在进入法定工商设立申报阶段，本表单用于采集录入市场监督管理局政务系统所需的法定真实信息，初审合格后自动生成法定章程并交由市监局审批。
-              </p>
-            </div>
-
-            {companyName && (
-              <div className="shrink-0 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-right sm:text-left">
-                <div className="text-[10px] text-slate-400 font-medium">当前办理主体</div>
-                <div className="text-xs font-bold text-slate-800 truncate max-w-[220px]">
-                  {companyName}
-                </div>
-                {order?.orderNo && (
-                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    单号: {order.orderNo}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* ==================== 3. 填报指引与前后差异对照卡片（解决“和前面页面的差异在哪里”） ==================== */}
-        <section className="mb-6 rounded-2xl border border-[#36B39E]/35 bg-gradient-to-br from-[#F4FBF9] via-white to-amber-50/20 p-4 sm:p-5 shadow-2xs">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#E6F7F2] text-[#2AA894] flex items-center justify-center shrink-0">
-                <Compass className="w-4 h-4 stroke-[2.5]" />
-              </div>
-              <div>
-                <h3 className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2 flex-wrap">
-                  <span>💡 填报指引：当前环节与第 1 步「需求评估」的区别与联系</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-[#1D6C5E] font-medium border border-[#2AA894]/20">
-                    前序数据已自动带入
-                  </span>
-                </h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  第 1 步是「意向摸底与方案选型」，当前是「市监局正式行政申报与合规初审」，两者分工不同。
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowDiffGuide(!showDiffGuide)}
-              className="inline-flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-800 px-2 py-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
-            >
-              <span>{showDiffGuide ? '收起对比' : '展开差异对比'}</span>
-              {showDiffGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-            </button>
-          </div>
-
-          {showDiffGuide && (
-            <div className="mt-3.5 pt-3 border-t border-slate-200/70 animate-in fade-in duration-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {/* Previous Step 1 */}
-                <div className="p-3 rounded-xl bg-white border border-slate-200/80 text-xs">
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                    <span className="font-bold text-slate-700 flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-slate-400" />
-                      前面第 1 步：需求与意向评估
-                    </span>
-                    <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-medium">
-                      意向摸底与选型
-                    </span>
-                  </div>
-                  <ul className="space-y-1.5 text-slate-600 text-[11px] leading-relaxed">
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-slate-400 font-bold shrink-0">· 核心目的：</span>
-                      <span>摸清开办设想，为您匹配设立方案（如小规模/一般人）并核算服务报价。</span>
-                    </li>
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-slate-400 font-bold shrink-0">· 填报内容：</span>
-                      <span>轻量意向调研，只需选择大概方向，<strong>无需提供身份证号、精确字号或任职信息</strong>。</span>
-                    </li>
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-slate-400 font-bold shrink-0">· 法律性质：</span>
-                      <span>商务咨询参考，不具备行政法律约束，不提交政务审批系统。</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Current Step 4 */}
-                <div className="p-3 rounded-xl bg-[#F4FBF9] border border-[#2AA894]/40 text-xs">
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#2AA894]/20">
-                    <span className="font-bold text-[#1D6C5E] flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#2AA894]" />
-                      当前第 4 步：申报资料填报与初审
-                    </span>
-                    <span className="text-[10px] text-[#1D6C5E] bg-emerald-100 font-bold px-1.5 py-0.5 rounded border border-[#2AA894]/20">
-                      正式履约申报
-                    </span>
-                  </div>
-                  <ul className="space-y-1.5 text-slate-700 text-[11px] leading-relaxed">
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-[#2AA894] font-bold shrink-0">· 核心目的：</span>
-                      <span>录入市场监督管理局设立登记网办系统，用于<strong>核发官方营业执照与公章刻制</strong>。</span>
-                    </li>
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-[#2AA894] font-bold shrink-0">· 填报内容：</span>
-                      <span>法定实名核验，需<strong>精确备选名称、法人/股东实名身份证、监事财务备案及住所证明</strong>。</span>
-                    </li>
-                    <li className="flex items-start gap-1.5">
-                      <span className="text-[#2AA894] font-bold shrink-0">· 法律性质：</span>
-                      <span><strong>法定政务申报资料</strong>，班步合规团队初审后生成法定《公司章程》交工商局审查。</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Seamless inheritance notice */}
-              <div className="mt-3 pt-2.5 border-t border-slate-200/60 flex items-start sm:items-center gap-2 text-[11px] text-slate-600">
-                <div className="w-4 h-4 rounded-full bg-[#2AA894] text-white flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
-                  <Check className="w-2.5 h-2.5 stroke-[3]" />
-                </div>
-                <div>
-                  <span className="font-bold text-[#1D6C5E]">免重复填写保障：</span>
-                  <span>
-                    您在第 1 步选择的行业方向、建议资本（{survey?.capitalAmount || '50 万元'}）、经营范围及联系人已全部自动带入本页基础数据。您无需从零构思，只需完善法定实名与任职身份等市监局必需项！
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={onBackToGroup}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all shadow-2xs cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
+            <span>返回办理清单</span>
+          </button>
         </section>
 
         {/* ==================== DELICATE CONNECTED CIRCLE STEPPER (NO BOXES) ==================== */}

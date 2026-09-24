@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { RoleRecord, PersonRecord, BasicInfoData } from './types';
-import { ChevronRight, Plus, AlertTriangle, UserCheck, ShieldCheck, ExternalLink } from 'lucide-react';
+import { ChevronRight, Plus, AlertTriangle, UserCheck, ShieldCheck, ExternalLink, Check } from 'lucide-react';
 
 interface PersonnelSectionProps {
   roles: RoleRecord[];
@@ -58,6 +58,9 @@ export const PersonnelSection: React.FC<PersonnelSectionProps> = ({
   if (hasGeneralManagerExercising) REQUIRED_ROLES.push('总经理');
   if (hasSupervisor) REQUIRED_ROLES.push('监事');
 
+  const missingRequired = REQUIRED_ROLES.filter((r) => !assignedRoles.includes(r));
+  const isSectionDone = roles.length > 0 && missingRequired.length === 0 && !errors['roles'];
+
   const getPerson = (r: RoleRecord): PersonRecord => {
     return (
       people[r.personId] || {
@@ -87,8 +90,23 @@ export const PersonnelSection: React.FC<PersonnelSectionProps> = ({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isSectionDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isSectionDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isSectionDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>企业主要管理人员</span>
@@ -98,9 +116,17 @@ export const PersonnelSection: React.FC<PersonnelSectionProps> = ({
               可一键复用已有自然人股东，也可录入新人员，分配法定代表人、财务负责人与办税联系人等职责。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            01
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isSectionDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              01
+            </span>
+          </div>
         </div>
 
         {/* Governance Linkage Notice Banner */}
@@ -185,18 +211,31 @@ export const PersonnelSection: React.FC<PersonnelSectionProps> = ({
             {roles.map((r) => {
               const p = getPerson(r);
               const cardError = errors[`role-${r.id}`];
+              const isPersonDone = Boolean(
+                !cardError &&
+                p.name && p.name !== '未填写姓名' &&
+                p.phone && p.phone !== '未填写联系电话' &&
+                r.roles.length > 0
+              );
 
               return (
                 <div key={r.id}>
                   <button
                     type="button"
                     onClick={() => onEditPersonnel(r.id)}
-                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 cursor-pointer group ${
+                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 cursor-pointer group relative overflow-hidden ${
                       cardError
                         ? 'border-rose-300 bg-rose-50/30 hover:bg-rose-50/60'
+                        : isPersonDone
+                        ? 'border-[#2AA894]/35 bg-gradient-to-r from-[#F7FCFA] via-white to-white hover:border-[#36B39E] shadow-2xs'
                         : 'border-slate-200 bg-white hover:border-[#36B39E] hover:bg-[#F8FCFB] shadow-2xs'
                     }`}
                   >
+                    {/* 左侧轻盈亮条 */}
+                    {isPersonDone && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90" />
+                    )}
+
                     {/* Avatar */}
                     <div className="w-10 h-10 rounded-xl bg-[#E6F7F2] border border-[#2AA894]/20 text-[#1D6C5E] flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-105 transition-transform">
                       {p.name.slice(0, 1) || '人'}

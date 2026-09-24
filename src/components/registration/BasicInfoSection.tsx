@@ -16,6 +16,7 @@ import {
   UserCheck,
   Info,
   CheckCircle2,
+  Check,
   UploadCloud,
   FileText,
   Eye,
@@ -171,11 +172,51 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
     update({ names: updated });
   };
 
+  // Completion status for all 7 panels (matching Step 1 highlight style)
+  const isPanel1Done = Boolean(data.org && (data.org !== '其他' || data.orgOther?.trim()) && !errors.org && !errors.orgOther);
+  const isPanel2Done = Boolean(data.names && data.names.some((n) => n.trim().length > 0) && !errors['name-0']);
+  const isPanel3Done = Boolean(data.capital && String(data.capital).trim() !== '' && !errors.capital);
+  const isPanel4Done = Boolean(data.scope && data.scope.trim().length > 0 && !errors.scope);
+  const isPanel5Done = Boolean(
+    data.regAddress?.trim() &&
+    data.regDistrict &&
+    (data.regProvidedByAgent || (data.regFiles && data.regFiles.length > 0)) &&
+    (data.sameAsRegAddress || (data.workAddress?.trim() && data.workDistrict)) &&
+    !errors.regAddress && !errors.regDistrict && !errors.regFiles
+  );
+  const isPanel6Done = Boolean(
+    currentBoard === '设董事会'
+      ? (data.directors && Number(data.directors) >= 3 && !errors.directors)
+      : (currentSingleDirector && currentSingleDirector.trim().length > 0)
+  );
+  const isPanel7Done = Boolean(
+    data.singleSupervisor === '设 1 名监事' ||
+    data.singleSupervisor === '设1名监事' ||
+    data.singleSupervisor === '一名监事' ||
+    data.singleSupervisor === '不设监事' ||
+    !data.singleSupervisor
+  );
+
   return (
     <div className="space-y-5">
       {/* Panel 01: 企业组织形式 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel1Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel1Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel1Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>企业组织形式</span>
@@ -185,9 +226,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               请选择本次拟设立企业的组织形式。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            01
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel1Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              01
+            </span>
+          </div>
         </div>
 
         <div>
@@ -241,8 +290,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 02: 拟注册企业名称 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel2Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel2Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel2Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>拟注册企业名称（按优先级排序）</span>
@@ -252,9 +316,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               请输入 1 ~ 9 个字号，我们将按照由上到下的顺序依次向市监局发起名称自主申报核准。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            02
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel2Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              02
+            </span>
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -311,8 +383,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 03: 注册资本 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel3Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel3Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel3Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>注册资本（万元人民币）</span>
@@ -322,9 +409,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               新《公司法》实施后，认缴出资需在 5 年内实缴完毕。建议结合企业经营规划与实际出资能力合理设定。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            03
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel3Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              03
+            </span>
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -352,8 +447,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 04: 企业简介与主营服务 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel4Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel4Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel4Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>企业简介与主营业务说明</span>
@@ -363,9 +473,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               用于规范化匹配经营范围与政务申报行业归属分类。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            04
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel4Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              04
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -421,8 +539,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 05: 注册地址与实际经营地址 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-5 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel5Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel5Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel5Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-5 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-[#2AA894]" />
@@ -433,9 +566,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               两类地址均可由服务商提供合规托管方案；若未勾选服务商提供，需选择地址性质并上传场地证明材料。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full shrink-0">
-            05
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel5Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              05
+            </span>
+          </div>
         </div>
 
         <div className="space-y-6">
@@ -823,8 +964,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 06: 董事设置 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel6Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel6Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel6Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-[#2AA894]" />
@@ -835,9 +991,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               新《公司法》施行后，已取消“执行董事”职务；企业可选择设立董事会、设立 1 名董事，或由经理代行职权。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            06
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel6Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              06
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -966,8 +1130,23 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       {/* Panel 07: 监事设置 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isPanel7Done
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isPanel7Done && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isPanel7Done && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-[#2AA894]" />
@@ -978,9 +1157,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
               根据新《公司法》第六十九条、第八十三条，有限责任公司经全体股东一致同意可不设监事；若设监事，则仅设 1 名监事。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            07
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isPanel7Done && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              07
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">

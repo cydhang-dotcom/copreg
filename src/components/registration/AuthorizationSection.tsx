@@ -113,10 +113,27 @@ export const AuthorizationSection: React.FC<AuthorizationSectionProps> = ({
     onToast('委托书模板已下载，可在浏览器中直接打印或另存为 PDF');
   };
 
+  const isAuthDone = Boolean(data.signedFiles && data.signedFiles.length > 0);
+
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-6 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isAuthDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isAuthDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isAuthDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-6 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>法定代表人委托书签署</span>
@@ -126,9 +143,17 @@ export const AuthorizationSection: React.FC<AuthorizationSectionProps> = ({
               用于公安特行公章刻制及市监局网上申报委托，按以下三步指引完成签署。
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            05
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isAuthDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              05
+            </span>
+          </div>
         </div>
 
         {/* Vertical Timeline */}

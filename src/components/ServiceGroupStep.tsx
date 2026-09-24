@@ -97,11 +97,11 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
                     当前待办事项
                   </span>
                   <h3 className="font-bold text-slate-800 text-xs sm:text-sm">
-                    填写企业注册申报资料（独立填报模块）
+                    填写企业注册申报资料
                   </h3>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
-                  进入独立资料填报模块，依据市监准则申报法定名称、股东出资、主要人员任命并上传经营场所证明。
+                  请填报企业法定名称、股东出资、主要人员任命并上传经营场所证明材料。
                 </p>
               </div>
             </div>
@@ -111,7 +111,7 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
               onClick={onProceedToFillDetails}
               className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white font-medium text-xs shadow-xs transition-colors flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
             >
-              <span>前往完善政务申报资料（第 4 步）</span>
+              <span>开始填报资料</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -373,7 +373,7 @@ export const ServiceGroupStep: React.FC<ServiceGroupStepProps> = ({
               onClick={onProceedToFillDetails}
               className="px-6 py-2 rounded-full bg-[#36B39E] hover:bg-[#2AA894] text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <span>前往完善政务申报资料（第 4 步）</span>
+              <span>进入申报资料填报模块</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

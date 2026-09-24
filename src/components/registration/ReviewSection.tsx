@@ -34,6 +34,12 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const trusteeName = authorization.trusteeName || contactPerson?.name || '林楚天';
   const trusteeIdNumber = authorization.trusteeIdNumber || '440301199308123418';
 
+  const isBasicDone = Boolean(basic.names && basic.names.some(Boolean) && basic.capital);
+  const isShareDone = shareholders.length > 0;
+  const isRolesDone = roles.length > 0;
+  const isAuthDone = Boolean(authorization.files && authorization.files.length > 0);
+  const isAccurateDone = Boolean(confirm.accurate);
+
   const renderFilesList = (files: FileAttachment[]) => {
     if (!files || files.length === 0) {
       return <span className="text-slate-400 text-xs">未附资料照片</span>;
@@ -96,9 +102,30 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       )}
 
       {/* Review Section 1: 企业基本信息 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-          <h2 className="text-sm sm:text-base font-bold text-slate-800">1. 企业基本信息</h2>
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isBasicDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {isBasicDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {isBasicDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 relative z-10">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-800">1. 企业基本信息</h2>
+            {isBasicDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => onGoChapter(0)}
@@ -170,11 +197,30 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </div>
 
       {/* Review Section 2: 股东及出资 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isShareDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {isShareDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {isShareDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 relative z-10">
           <div className="flex items-center gap-2">
             <h2 className="text-sm sm:text-base font-bold text-slate-800">2. 股东及出资结构</h2>
             <span className="text-xs text-slate-400">（共 {shareholders.length} 位股东）</span>
+            {isShareDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
           </div>
           <button
             type="button"
@@ -232,9 +278,30 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </div>
 
       {/* Review Section 3: 企业主要人员 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-          <h2 className="text-sm sm:text-base font-bold text-slate-800">3. 企业主要管理人员</h2>
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isRolesDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {isRolesDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {isRolesDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 relative z-10">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-800">3. 企业主要管理人员</h2>
+            {isRolesDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => onGoChapter(2)}
@@ -277,9 +344,30 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </div>
 
       {/* Review Section 4: 法定代表人委托书 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-          <h2 className="text-sm sm:text-base font-bold text-slate-800">4. 法定代表人委托书签署</h2>
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isAuthDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {isAuthDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {isAuthDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 relative z-10">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-800">4. 法定代表人委托书签署</h2>
+            {isAuthDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => onGoChapter(3)}
@@ -358,21 +446,42 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </div>
 
       {/* Review Section 7: 信息真实性确认 */}
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <label className="flex items-start gap-3 cursor-pointer select-none">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isAccurateDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {isAccurateDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {isAccurateDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <label className="flex items-start gap-3 cursor-pointer select-none relative z-10">
           <input
             type="checkbox"
             checked={confirm.accurate}
             onChange={(e) => onUpdateConfirm({ accurate: e.target.checked })}
             className="w-4 h-4 rounded text-[#36B39E] focus:ring-[#36B39E] mt-0.5"
           />
-          <div className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
-            我已核对本次拟申报的全部企业信息与证件资料，确认所填内容真实、完整、有效，并同意专员依此提交政务初审。
-            <span className="text-rose-500 ml-0.5">*</span>
+          <div className="flex-1">
+            <div className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
+              我已核对本次拟申报的全部企业信息与证件资料，确认所填内容真实、完整、有效，并同意专员依此提交政务初审。
+              <span className="text-rose-500 ml-0.5">*</span>
+            </div>
+            {isAccurateDone && (
+              <div className="inline-flex items-center gap-1 text-[11px] text-[#1D6C5E] font-semibold mt-1">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已确认真实性及授权</span>
+              </div>
+            )}
           </div>
         </label>
         {errors.accurate && (
-          <p className="text-xs text-rose-500 font-medium mt-2 ml-7">{errors.accurate}</p>
+          <p className="text-xs text-rose-500 font-medium mt-2 ml-7 relative z-10">{errors.accurate}</p>
         )}
       </div>
     </div>

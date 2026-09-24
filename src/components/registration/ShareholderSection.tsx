@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { ShareholderRecord, PersonRecord, FileAttachment } from './types';
-import { ChevronRight, Plus, AlertTriangle, Users } from 'lucide-react';
+import { ChevronRight, Plus, AlertTriangle, Users, Check } from 'lucide-react';
 
 interface ShareholderSectionProps {
   shareholders: ShareholderRecord[];
@@ -23,6 +23,7 @@ export const ShareholderSection: React.FC<ShareholderSectionProps> = ({
   errors,
 }) => {
   const totalRatio = shareholders.reduce((sum, s) => sum + (Number(s.ratio) || 0), 0);
+  const isSectionDone = shareholders.length > 0 && Math.abs(totalRatio - 100) < 0.001 && !errors['shareholders'];
 
   const getTitle = (s: ShareholderRecord): string => {
     if (s.type === '自然人' && s.personId && people[s.personId]) {
@@ -77,8 +78,23 @@ export const ShareholderSection: React.FC<ShareholderSectionProps> = ({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-white shadow-2xs">
-        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+      <div
+        className={`rounded-2xl p-5 sm:p-6 border transition-all duration-300 relative overflow-hidden ${
+          isSectionDone
+            ? 'border-[#2AA894]/30 bg-gradient-to-br from-[#F7FCFA] via-white to-white shadow-[0_4px_16px_-4px_rgba(42,168,148,0.08)]'
+            : 'border-slate-200/80 bg-white shadow-2xs hover:border-slate-300'
+        }`}
+      >
+        {/* 左侧轻盈亮条 */}
+        {isSectionDone && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90 shadow-[0_0_6px_rgba(78,209,188,0.3)] z-10" />
+        )}
+        {/* 右上角柔和微光背景 */}
+        {isSectionDone && (
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#E6F7F2]/35 rounded-full blur-2xl pointer-events-none" />
+        )}
+
+        <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 relative z-10">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5">
               <span>股东及出资结构</span>
@@ -90,9 +106,17 @@ export const ShareholderSection: React.FC<ShareholderSectionProps> = ({
                 : '请添加至少 1 位股东并明确出资方式与持股比例。'}
             </p>
           </div>
-          <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
-            01
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {isSectionDone && (
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E6F7F2] text-[#1D6C5E] border border-[#36B39E]/30 shadow-xs select-none">
+                <Check className="w-3 h-3 text-[#2AA894] stroke-[3]" />
+                <span>已完善</span>
+              </div>
+            )}
+            <span className="text-xs font-bold text-[#2AA894] bg-[#E6F7F2] px-2.5 py-0.5 rounded-full">
+              01
+            </span>
+          </div>
         </div>
 
         {/* Global errors for shareholders */}
@@ -130,17 +154,31 @@ export const ShareholderSection: React.FC<ShareholderSectionProps> = ({
           <div className="space-y-3">
             {shareholders.map((s) => {
               const cardError = errors[`share-${s.id}`];
+              const isShareDone = Boolean(
+                !cardError &&
+                Number(s.ratio) > 0 &&
+                getTitle(s) !== '未填写姓名' &&
+                getTitle(s) !== '未填写企业全称'
+              );
+
               return (
                 <div key={s.id}>
                   <button
                     type="button"
                     onClick={() => onEditShareholder(s.id)}
-                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 cursor-pointer group ${
+                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center gap-4 cursor-pointer group relative overflow-hidden ${
                       cardError
                         ? 'border-rose-300 bg-rose-50/30 hover:bg-rose-50/60'
+                        : isShareDone
+                        ? 'border-[#2AA894]/35 bg-gradient-to-r from-[#F7FCFA] via-white to-white hover:border-[#36B39E] shadow-2xs'
                         : 'border-slate-200 bg-white hover:border-[#36B39E] hover:bg-[#F8FCFB] shadow-2xs'
                     }`}
                   >
+                    {/* 左侧轻盈亮条 */}
+                    {isShareDone && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#4ED1BC] to-[#2AA894] opacity-90" />
+                    )}
+
                     {/* Avatar Badge */}
                     <div className="w-10 h-10 rounded-xl bg-[#E6F7F2] border border-[#2AA894]/20 text-[#1D6C5E] flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-105 transition-transform">
                       {s.type === '自然人' ? getTitle(s).slice(0, 1) || '人' : s.type === '企业' ? '企' : '其'}
